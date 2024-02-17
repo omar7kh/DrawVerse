@@ -17,7 +17,7 @@ const Home = () => {
 
   return (
     <div className='min-h-screen w-full bg-gray-800 text-white relative'>
-      <nav className='flex justify-between items-center px-5 lg:px-16 h-20 z-50 fixed left-0 right-0 bg-[#DFB700]'>
+      <nav className='flex justify-between items-center px-5 h-20 z-50 absolute inset-x-0 lg:px-16'>
         <Logo
           width={40}
           height={40}
@@ -30,22 +30,21 @@ const Home = () => {
         {showDropdown && <DropdownMenu />}
       </nav>
 
-      <div
-        className='h-[450px] w-full flex flex-col justify-center items-center font-medium gap-12'
-        style={{
-          backgroundImage: `url(${bgYellow})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          backgroundPosition: 'bottom',
-        }}
-      >
+      <div className='w-full h-[210px]'>
+        <img
+          src={bgYellow}
+          className='w-full h-full object-cover object-bottom'
+        />
+      </div>
+
+      <div className='flex flex-col justify-center items-center mt-20 mb-20 lg:mb-0 gap-10'>
         <p
           className='text-[18px] w-[80%] text-justify md:text-[22px] lg:max-w-[70%] lg:text-[25px] lg:tracking-wide'
           style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}
         >
           Welcome to the{' '}
           <span
-            className='text-[#202020] font-bold'
+            className='text-[#DFB700] font-bold'
             style={{ textShadow: 'none' }}
           >
             DrawVerse
@@ -54,7 +53,7 @@ const Home = () => {
           <span className='italic'>collaboration</span> thrive. Every mark here
           is a <span className='font-bold'>symphony</span> of ideas,{' '}
           <span
-            className='text-[#202020] font-bold'
+            className='text-[#DFB700] font-bold'
             style={{ textShadow: 'none' }}
           >
             sparking
@@ -62,7 +61,7 @@ const Home = () => {
           <span className='italic'>innovation</span> and igniting{' '}
           <span className='font-bold'>expression</span>. This dynamic{' '}
           <span
-            className='font-bold text-[#202020]'
+            className='font-bold text-[#DFB700]'
             style={{ textShadow: 'none' }}
           >
             platform
@@ -74,7 +73,7 @@ const Home = () => {
         </p>
         <Link
           to='/'
-          className='bg-gray-800 p-2 rounded-md text-xl font-bold hover:text-[#DFB700] delay-75 duration-200'
+          className='bg-[#DFB700] p-1 rounded-md lg:p-2 lg:text-xl text-black font-bold delay-75 duration-200 hover:scale-95 transition'
         >
           Get started
         </Link>
