@@ -3,6 +3,8 @@ import avatar from '../assets/images/person-img.jpeg';
 import { TbPhotoEdit } from 'react-icons/tb';
 import { useRef, useState } from 'react';
 import { Logo } from '../components';
+import { FaEye } from 'react-icons/fa';
+import { FaEyeSlash } from 'react-icons/fa';
 
 const Profile = () => {
   const [userData, setUserData] = useState({
@@ -10,6 +12,8 @@ const Profile = () => {
     email: '',
     password: '',
   });
+  const [showPassword, setShowPassword] = useState(false);
+
   const fileInputRef = useRef(null);
 
   const handleFormChange = (e) => {
@@ -29,17 +33,16 @@ const Profile = () => {
     console.log('Selected file:', image);
   };
 
+  console.log(showPassword);
   return (
     <div className='min-h-screen w-full bg-gray-800 text-white'>
-      <div
-        className='w-full h-[300px] relative flex justify-center items-center'
-        style={{
-          backgroundImage: `url(${bgYellow})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundSize: 'cover',
-          backgroundPosition: 'bottom',
-        }}
-      >
+      <div className='relative flex justify-center items-center'>
+        <div className='w-full h-[210px]'>
+          <img
+            src={bgYellow}
+            className='w-full h-full object-cover object-bottom'
+          />
+        </div>
         <Logo
           width={40}
           height={40}
@@ -59,7 +62,7 @@ const Profile = () => {
         </div>
       </div>
 
-      <span className='mt-32 mb-8 block text-center font-semibold text-3xl'>
+      <span className='my-32 mb-16 block text-center font-semibold text-3xl'>
         Edit Profile
       </span>
 
@@ -76,18 +79,6 @@ const Profile = () => {
         className='w-[400px] pb-10 lg:w-[550px] mx-auto flex flex-col gap-5 justify-center items-center'
       >
         <div className='flex flex-col w-full'>
-          <label htmlFor='email'>Email</label>
-          <input
-            className='w-full h-10 px-5 py-3 border-2 border-gray-800 text-black rounded-md'
-            type='email'
-            name='email'
-            id='email'
-            placeholder='example@gmail.com'
-            onChange={(e) => handleFormChange(e)}
-          />
-        </div>
-
-        <div className='flex flex-col w-full'>
           <label htmlFor='userName'>User Name</label>
           <input
             className='w-full h-10 px-5 py-3 border-2 border-gray-800 text-black rounded-md'
@@ -100,20 +91,43 @@ const Profile = () => {
         </div>
 
         <div className='flex flex-col w-full'>
-          <label htmlFor='password'>Password</label>
+          <label htmlFor='email'>Email</label>
           <input
             className='w-full h-10 px-5 py-3 border-2 border-gray-800 text-black rounded-md'
-            type='password'
+            type='email'
+            name='email'
+            id='email'
+            placeholder='example@gmail.com'
+            onChange={(e) => handleFormChange(e)}
+          />
+        </div>
+
+        <div className='flex flex-col w-full relative'>
+          <label htmlFor='password'>New Password</label>
+          <input
+            className='w-full h-10 pl-5 pr-8 py-3 border-2 border-gray-800 text-black rounded-md'
+            type={showPassword ? 'text' : 'password'}
             name='password'
             id='password'
             placeholder='New Password'
             onChange={(e) => handleFormChange(e)}
           />
+          {!showPassword ? (
+            <FaEye
+              className='absolute bottom-3 right-3 text-black cursor-pointer'
+              onClick={() => setShowPassword(true)}
+            />
+          ) : (
+            <FaEyeSlash
+              className='absolute bottom-3 right-3 text-black cursor-pointer'
+              onClick={() => setShowPassword(false)}
+            />
+          )}
         </div>
 
         <button
           type='submit'
-          className='bg-[#DFB700] text-black p-2 rounded-md font-bold text-lg hover:bg-[#c3a939]'
+          className='bg-[#DFB700] text-black p-2 rounded-md font-bold text-lg hover:scale-95 transition'
         >
           confirm Changes
         </button>
