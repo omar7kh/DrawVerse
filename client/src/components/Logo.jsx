@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+
 import logo from '../assets/images/DrawVerse_Logo.svg';
 
 const Logo = ({ width, height, textClasses, divStyle }) => {
