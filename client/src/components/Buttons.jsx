@@ -3,23 +3,29 @@ import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
 
 function Buttons() {
-	const login = useGoogleLogin({
-		onSuccess: async (response) => {
-			try {
-				const res = await axios.get(
-					"https://accounts.google.com/o/oauth2/v2/auth",
-					{
-						headers: {
-							Authorization: `Bearer ${response.acces_token}`,
-						},
-					}
-				);
-				console.log(res);
-			} catch (error) {
-				console.log(error);
-			}
-		},
-	});
+	// useEffect(() => {
+	// 	if (userData) {
+	// 		axios
+	// 			.get(
+	// 				`https://www.googleapis.com/oauth2/v1/userinfo?access_token=${user.access_token}`,
+	// 				{
+	// 					headers: {
+	// 						Authorization: `Bearer ${user.access_token}`,
+	// 						Accept: "application/json",
+	// 					},
+	// 				}
+	// 			)
+	// 			.then((res) => {
+	// 				setProfile(res.data);
+	// 			})
+	// 			.catch((err) => console.log(err));
+	// 	}
+	// }, [userData]);
+
+	// const googleLogin = useGoogleLogin({
+	// 	onSuccess: (tokenResponse) => setUserData(tokenResponse),
+	// 	onError: (error) => console.log("Login Failed:", error),
+	// });
 
 	return (
 		<>

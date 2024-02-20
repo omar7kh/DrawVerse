@@ -3,12 +3,14 @@ import { Logo } from "../../components";
 import { useGoogleLogin } from "@react-oauth/google";
 import Buttons from "../../components/Buttons";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaRegEye } from "react-icons/fa";
+import { UserContext } from "../../context/UserContext";
 
 const LogIn = () => {
+	const { backendApiUrl } = useContext(UserContext);
 	const navigate = useNavigate();
 
 	const [userData, setUserData] = useState({
@@ -26,12 +28,12 @@ const LogIn = () => {
 	const handleDataChange = (e) => {
 		setUserData({ ...userData, [e.target.name]: e.target.value });
 	};
-
 	const handleFormSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
+
 		try {
-			const res = await axios.post(`${backendApiUrl}/login`, userData, {
+			const res = await axios.post(`${backendApiUrl}/signin`, userData, {
 				withCredentials: true,
 			});
 
@@ -46,7 +48,7 @@ const LogIn = () => {
 				setIsAuthTrue(false);
 				console.log(errors);
 			} else if (res.data.success) {
-				navigate("/home");
+				navigate("/main");
 				const userId = res.data.userId;
 				localStorage.setItem("userId", userId);
 			} else {
@@ -54,39 +56,11 @@ const LogIn = () => {
 				setLoading(false);
 				setIsAuthTrue(true);
 			}
-		} catch (error) {}
+		} catch (error) {
+			console.log("error while logging in:", error);
+		}
 	};
-	const googleLogin = useGoogleLogin({
-		onSuccess: (tokenResponse) => async (e) => {
-			e.preventDefault();
-			setLoading(true);
-			try {
-				const res = await axios.post(`${backendApiUrl}/login`, userData, {
-					withCredentials: true,
-				});
 
-				if (res.data.errors) {
-					const errors = {};
-					res.data.errors.forEach((error) => {
-						errors[error.path] = error.msg;
-					});
-
-					setFieldErrors(errors);
-					setLoading(false);
-					setIsAuthTrue(false);
-					console.log(errors);
-				} else if (res.data.success) {
-					navigate("/home");
-					const userId = res.data.userId;
-					localStorage.setItem("userId", userId);
-				} else {
-					setFieldErrors((error) => error === "");
-					setLoading(false);
-					setIsAuthTrue(true);
-				}
-			} catch (error) {}
-		},
-	});
 	return (
 		<>
 			<div className="main-container bg-[#DFB700] w-full z-0 min-h-screen relative overflow-hidden">
@@ -119,7 +93,7 @@ const LogIn = () => {
 						onSubmit={handleFormSubmit}
 						className="flex flex-col  gap-2 text-white  "
 					>
-						<label className="">
+						<label htmlFor="email" className="">
 							E-mail:
 							<input
 								className="block rounded-full pl-4 leading-7 text-black placeholder:p-4 "
@@ -127,24 +101,43 @@ const LogIn = () => {
 								id="email"
 								name="email"
 								placeholder="Enter your Email"
-							/>
-						</label>
-						<div className="relative">
-							<label htmlFor="password">Password:</label>
-							<input
-								className={` block  rounded-full pl-4 leading-7 text-black placeholder:p-4`}
-								type={showPassword ? "text" : "password"}
-								id="password"
-								name="password"
-								placeholder="Enter your Password"
 								onChange={handleDataChange}
 							/>
-							{showPassword ? (
-								<FaEyeSlash className="absolute right-2 top-7 text-black hover:cursor-pointer" />
-							) : (
-								<FaRegEye className="absolute right-2 top-7 text-black hover:cursor-pointer" />
-							)}
+						</label>
+						{fieldErrors.email && (
+							<span className="bg-red-700 p-1 mb-2 block w-fit rounded-md">
+								{fieldErrors.email}
+							</span>
+						)}
+						<div className="relative">
+							<label htmlFor="password">
+								Password:
+								<input
+									className={` block  rounded-full pl-4 leading-7 text-black placeholder:p-4`}
+									type={showPassword ? "text" : "password"}
+									id="password"
+									name="password"
+									placeholder="Enter your Password"
+									onChange={handleDataChange}
+								/>
+								{showPassword ? (
+									<FaEyeSlash
+										onClick={() => setShowPassword(!showPassword)}
+										className="absolute right-2 top-7 mt-1 text-black hover:cursor-pointer"
+									/>
+								) : (
+									<FaRegEye
+										onClick={() => setShowPassword(!showPassword)}
+										className="absolute right-2 top-7 mt-1 text-black hover:cursor-pointer"
+									/>
+								)}
+							</label>
 						</div>
+						{fieldErrors.email && (
+							<span className="bg-red-700 p-1 mb-2 block w-fit rounded-md">
+								{fieldErrors.email}
+							</span>
+						)}
 						<button
 							type="submit"
 							className="font-bold text-base bg-[#DFB700] w-28 mx-auto  delay-75 duration-500 text-textWhite block rounded-md p-0.5 mt-2  hover:bg-[#b19930]  hover:scale-105 transition hover:duration-500 hover:ease-in-out"
@@ -157,7 +150,6 @@ const LogIn = () => {
 						<h3 className="text-white">OR</h3>
 						<hr className="w-28 h-1 decoration-white " />
 					</div>
-					<Buttons />
 					<p className="text-white">
 						Dont have account?{" "}
 						<Link to="/signup" className="text-[#DFB700]  ml-2 hover:underline">

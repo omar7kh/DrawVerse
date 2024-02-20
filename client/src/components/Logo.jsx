@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import logo from "../assets/images/Logo.svg";
 import PropTypes from "prop-types";
 const Logo = ({ width, height, textClasses }) => {
-	console.log(width);
 	return (
 		<div className="flex justify-center items-center gap-2">
 			<img

@@ -1,7 +1,7 @@
 import User from "../models/userSchema.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import "dotenv/coinfig";
+import "dotenv/config";
 
 export const userSignUp = async (req, res) => {
 	const { username, email, password } = req.body;
@@ -50,14 +50,45 @@ export const userSignIn = async (req, res) => {
 				error: "User or Password are not correct",
 			});
 		}
+		const expiresInMs = 24 * 60 * 60 * 1000;
+
+		const expiresInDate = new Date(Date.now() + expiresInMs);
+
+		const token = jwt.sign({ userId: loggedUser._id }, process.env.JWT_SECRET, {
+			expiresIn: expiresInMs,
+		});
+
+		const cookieOptions = {
+			httpOnly: true,
+			maxAge: expiresInMs,
+		};
+
+		res.cookie("jwt", token, cookieOptions);
+
+		const options = {
+			maxAge: expiresInMs,
+		};
+		const payload = {
+			expires: expiresInDate.toISOString(),
+			userId: loggedUser._id,
+		};
+		res.cookie("JWTinfo", payload, options);
 		return res.send({
 			success: true,
 			msg: "User logged in",
 			userId: loggedUser._id,
 		});
-	} catch (error) {}
-	res.status(500).send({
-		success: false,
-		error: error.message,
-	});
+	} catch (error) {
+		res.status(500).send({
+			success: false,
+			error: error.message,
+		});
+	}
+};
+
+// Logout
+export const Logout = async (req, res) => {
+	res.clearCookie("jwt");
+	res.clearCookie("JWTinfo");
+	res.send({ msg: "successfully logged out" });
 };
