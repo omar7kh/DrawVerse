@@ -7,6 +7,7 @@ import {
   Profile,
   SignUp,
   WhiteBoard,
+  MainPage,
 } from '../pages';
 
 const router = createBrowserRouter([
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
       { path: '/signup', element: <SignUp /> },
       { path: '/profile', element: <Profile /> },
       { path: '/whiteboard', element: <WhiteBoard /> },
+      { path: '/main', element: <MainPage /> },
 
       {
         path: '*',

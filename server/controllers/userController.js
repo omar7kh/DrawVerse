@@ -86,7 +86,6 @@ export const userSignIn = async (req, res) => {
   }
 };
 
-// Logout
 export const Logout = async (req, res) => {
   res.clearCookie('jwt');
   res.clearCookie('JWTinfo');

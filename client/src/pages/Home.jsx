@@ -2,18 +2,31 @@ import { DropdownMenu, Logo } from '../components';
 import { IoPerson } from 'react-icons/io5';
 import Highlight from '../components/Highlight';
 import bgYellow from '../assets/images/wave-haikei.svg';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import designImg from '../assets/images/design.svg';
 import teamImg from '../assets/images/team_collaboration_re_ow29.svg';
 import creativeImg from '../assets/images/creative.svg';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
 
 const Home = () => {
+  const { isAuthenticated, checkIfIsAuthenticated } = useContext(UserContext);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
+
+  useEffect(() => {
+    const check = async () => {
+      const checkResult = await checkIfIsAuthenticated();
+
+      if (!checkResult) {
+        navigate('/');
+      }
+    };
+    check();
+  }, []);
 
   return (
     <div className='min-h-screen w-full bg-gray-800 text-white relative'>
@@ -72,7 +85,7 @@ const Home = () => {
           <span className='underline'>possibilities</span>.
         </p>
         <Link
-          to='/'
+          to={isAuthenticated ? '/whiteboard' : '/login'}
           className='bg-[#DFB700] p-1 rounded-md lg:p-2 lg:text-xl text-black font-bold delay-75 duration-200 hover:scale-95 transition'
         >
           Get started

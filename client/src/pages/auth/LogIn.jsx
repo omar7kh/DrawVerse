@@ -1,4 +1,4 @@
-import Shape from '../../assets/images/wave-haikei.svg';
+import Shape from '../../assets/images/Rectangle.svg';
 import { Logo } from '../../components';
 import { useGoogleLogin } from '@react-oauth/google';
 import Buttons from '../../components/Buttons';
