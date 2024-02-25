@@ -95,7 +95,7 @@ const SignUp = () => {
                 onChange={(e) => handleFormChange(e)}
               />
               {fieldErrors.username && (
-                <span className='bg-red-700 p-1 mb-2 block max-w-[200px] rounded-md'>
+                <span className='bg-red-700 text-sm p-1 mb-2 block w-fit max-w-[330px] rounded-md'>
                   {fieldErrors.username}
                 </span>
               )}
@@ -111,7 +111,7 @@ const SignUp = () => {
                 onChange={(e) => handleFormChange(e)}
               />
               {fieldErrors.email && (
-                <span className='bg-red-700 p-1 mb-2 block max-w-[200px] rounded-md'>
+                <span className='bg-red-700 text-sm p-1 mb-2 block w-fit max-w-[330px] rounded-md'>
                   {fieldErrors.email}
                 </span>
               )}
@@ -128,7 +128,7 @@ const SignUp = () => {
                   onChange={(e) => handleFormChange(e)}
                 />
 
-                {showPassword ? (
+                {!showPassword ? (
                   <FaRegEye
                     onClick={() => setShowPassword(!showPassword)}
                     className='absolute right-2 bottom-[9px] text-black hover:cursor-pointer'
@@ -142,7 +142,7 @@ const SignUp = () => {
               </div>
 
               {fieldErrors.password && (
-                <span className='bg-red-700 p-1 mb-2 block max-w-[200px] rounded-md'>
+                <span className='bg-red-700 text-sm p-1 mb-2 block w-fit max-w-[330px] rounded-md'>
                   {fieldErrors.password}
                 </span>
               )}

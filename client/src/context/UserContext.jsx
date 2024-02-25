@@ -38,6 +38,7 @@ export const UserContextProvider = ({ children }) => {
         setIsAuthenticated(true);
         return true;
       } else {
+        setIsAuthenticated(false);
         return false;
       }
     }

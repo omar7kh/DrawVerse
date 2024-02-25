@@ -103,7 +103,7 @@ const LogIn = () => {
               />
             </label>
             {fieldErrors.email && (
-              <span className='bg-red-700 p-1 mb-2 block w-fit rounded-md'>
+              <span className='bg-red-700 text-sm p-1 mb-2 block w-fit max-w-[330px] rounded-md'>
                 {fieldErrors.email}
               </span>
             )}
@@ -131,14 +131,14 @@ const LogIn = () => {
                 )}
               </label>
             </div>
-            {fieldErrors.email && (
-              <span className='bg-red-700 p-1 mb-2 block w-fit rounded-md'>
-                {fieldErrors.email}
+            {fieldErrors.password && (
+              <span className='bg-red-700 text-sm p-1 mb-2 block w-fit max-w-[330px] rounded-md'>
+                {fieldErrors.password}
               </span>
             )}
 
             {unauthenticatedMsg && (
-              <span className='bg-red-700 p-1 mb-2 block w-fit rounded-md'>
+              <span className='bg-red-700 text-sm p-1 mb-2 block w-fit max-w-[330px] rounded-md'>
                 {unauthenticatedMsg}
               </span>
             )}

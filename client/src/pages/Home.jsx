@@ -6,12 +6,13 @@ import { useContext, useEffect, useState } from 'react';
 import designImg from '../assets/images/design.svg';
 import teamImg from '../assets/images/team_collaboration_re_ow29.svg';
 import creativeImg from '../assets/images/creative.svg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
 const Home = () => {
   const { isAuthenticated, checkIfIsAuthenticated } = useContext(UserContext);
   const [showDropdown, setShowDropdown] = useState(false);
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -20,12 +21,12 @@ const Home = () => {
   useEffect(() => {
     const check = async () => {
       const checkResult = await checkIfIsAuthenticated();
-
       if (!checkResult) {
         navigate('/');
       }
     };
     check();
+    console.log(isAuthenticated);
   }, []);
 
   return (
@@ -40,7 +41,11 @@ const Home = () => {
           className='text-xl md:text-2xl lg:text-3xl cursor-pointer'
           onClick={toggleDropdown}
         />{' '}
-        {showDropdown && <DropdownMenu />}
+        {showDropdown && (
+          <div className='absolute top-14 right-16'>
+            <DropdownMenu />
+          </div>
+        )}
       </nav>
 
       <div className='w-full h-[210px]'>
@@ -85,7 +90,7 @@ const Home = () => {
           <span className='underline'>possibilities</span>.
         </p>
         <Link
-          to={isAuthenticated ? '/whiteboard' : '/login'}
+          to={isAuthenticated ? '/main' : '/login'}
           className='bg-[#DFB700] p-1 rounded-md lg:p-2 lg:text-xl text-black font-bold delay-75 duration-200 hover:scale-95 transition'
         >
           Get started
