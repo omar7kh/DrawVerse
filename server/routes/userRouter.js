@@ -18,7 +18,7 @@ const router = Router();
 
 router
 	.post("/signup", signUpSchema, validateSchema, userSignUp)
-	.post("/signin", signInSchema, validateSchema, userSignIn)
+	.post("/signIn", signInSchema, validateSchema, userSignIn)
 	.post("/isAuth", isAuth)
 	.post("/logout", Logout)
 	.post("/updateProfile/:userId", editSchema, validateSchema, updateProfile)

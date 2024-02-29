@@ -1,4 +1,3 @@
-
 import bgYellow from "../assets/images/wave-haikei.svg";
 import avatar from "../assets/images/person-img.jpeg";
 import { TbPhotoEdit } from "react-icons/tb";
@@ -9,10 +8,18 @@ import { FaEyeSlash } from "react-icons/fa";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { IoArrowBackOutline } from "react-icons/io5";
 
 const Profile = () => {
-	const { isAuthenticated,setIsAuthenticated, backendApiUrl, userId, setUserData, userData,checkIfIsAuthenticated } =
-		useContext(UserContext);
+	const {
+		isAuthenticated,
+		setIsAuthenticated,
+		backendApiUrl,
+		userId,
+		setUserData,
+		userData,
+		checkIfIsAuthenticated,
+	} = useContext(UserContext);
 
 	const navigate = useNavigate();
 
@@ -26,21 +33,21 @@ const Profile = () => {
 		password: "",
 	});
 
-  useEffect(() => {
-    const check = async () => {
-      const checkIsAuth = await checkIfIsAuthenticated();
-      if (checkIsAuth) {
-        setIsAuthenticated(true);
-        console.log('authenticated');
-      } else {
-        navigate('/login');
-        setIsAuthenticated(false);
-        console.log('not authenticated');
-      }
-    };
+	useEffect(() => {
+		const check = async () => {
+			const checkIsAuth = await checkIfIsAuthenticated();
+			if (checkIsAuth) {
+				setIsAuthenticated(true);
+				console.log("authenticated");
+			} else {
+				navigate("/login");
+				setIsAuthenticated(false);
+				console.log("not authenticated");
+			}
+		};
 
-    check();
-  }, [isAuthenticated]);
+		check();
+	}, [isAuthenticated]);
 
 	const handleFormRequest = async (e) => {
 		e.preventDefault();
@@ -187,16 +194,16 @@ const Profile = () => {
 					</div>
 				</div>
 
-				<div className='my-32 mb-16 mx-auto w-[400px] lg:w-[550px] flex items-center relative'>
-          <IoArrowBackOutline
-            className='absolute left-0 rounded-full h-7 w-7 text-2xl cursor-pointer hover:text-black duration-300 delay-75 hover:-translate-x-1 hover:bg-yellow-400'
-            onClick={() => window.history.back()}
-          />
+				<div className="my-32 mb-16 mx-auto w-[400px] lg:w-[550px] flex items-center relative">
+					<IoArrowBackOutline
+						className="absolute left-0 rounded-full h-7 w-7 text-2xl cursor-pointer hover:text-black duration-300 delay-75 hover:-translate-x-1 hover:bg-yellow-400"
+						onClick={() => window.history.back()}
+					/>
 
-          <span className='text-center w-full font-semibold text-3xl'>
-            Edit Profile
-          </span>
-        </div>
+					<span className="text-center w-full font-semibold text-3xl">
+						Edit Profile
+					</span>
+				</div>
 
 				<input
 					type="file"

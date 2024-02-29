@@ -3,8 +3,9 @@ import "dotenv/config";
 import connectMongoose from "./utils/connectMongoose.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import routeProvider from "./routes/userRouter.js";
+import userRouter from "./routes/userRouter.js";
 import multer from "multer";
+import boardRouter from "./routes/boardRouter.js";
 
 const upload = multer();
 const PORT = process.env.PORT || 3000;
@@ -25,7 +26,6 @@ app.use(cookieParser());
 app.use(userRouter);
 app.use(boardRouter);
 app.use(upload.single());
-
 
 if (await BDConnect) {
 	console.log("MongoDB Connect");

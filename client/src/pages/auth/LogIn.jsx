@@ -35,7 +35,7 @@ const LogIn = () => {
 		setLoading(true);
 
 		try {
-			const res = await axios.post(`${backendApiUrl}/signin`, userData, {
+			const res = await axios.post(`${backendApiUrl}/signIn`, userData, {
 				withCredentials: true,
 			});
 			if (res.data.error) {
@@ -55,7 +55,6 @@ const LogIn = () => {
 				navigate("/main");
 				const userId = res.data.userId;
 				localStorage.setItem("userId", userId);
-				setUserId(userId);
 				setUserData({
 					userName: res.data.username,
 					email: res.data.email,
