@@ -7,9 +7,12 @@ import { FaEye } from 'react-icons/fa';
 import { FaEyeSlash } from 'react-icons/fa';
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import { IoArrowBackOutline } from 'react-icons/io5';
 
 const Profile = () => {
-  const { isAuthenticated } = useContext(UserContext);
+  const { checkIfIsAuthenticated, isAuthenticated, setIsAuthenticated } =
+    useContext(UserContext);
+
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
     userName: '',
@@ -20,10 +23,20 @@ const Profile = () => {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/');
-    }
-  }, []);
+    const check = async () => {
+      const checkIsAuth = await checkIfIsAuthenticated();
+      if (checkIsAuth) {
+        setIsAuthenticated(true);
+        console.log('authenticated');
+      } else {
+        navigate('/login');
+        setIsAuthenticated(false);
+        console.log('not authenticated');
+      }
+    };
+
+    check();
+  }, [isAuthenticated]);
 
   const handleFormChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -56,7 +69,7 @@ const Profile = () => {
             width={40}
             height={40}
             textClasses='font-bold text-sm md:text-xl lg:text-2xl'
-            divStyle='absolute left-16 top-5'
+            divStyle='absolute left-5 top-5 sm:left-8 lg:left-12 xl:left-16'
           />
           <div className='w-[200px] h-[200px] absolute -bottom-16'>
             <img
@@ -71,9 +84,16 @@ const Profile = () => {
           </div>
         </div>
 
-        <span className='my-32 mb-16 block text-center font-semibold text-3xl'>
-          Edit Profile
-        </span>
+        <div className='my-32 mb-16 mx-auto w-[400px] lg:w-[550px] flex items-center relative'>
+          <IoArrowBackOutline
+            className='absolute left-0 rounded-full h-7 w-7 text-2xl cursor-pointer hover:text-black duration-300 delay-75 hover:-translate-x-1 hover:bg-yellow-400'
+            onClick={() => window.history.back()}
+          />
+
+          <span className='text-center w-full font-semibold text-3xl'>
+            Edit Profile
+          </span>
+        </div>
 
         <input
           type='file'
@@ -136,7 +156,7 @@ const Profile = () => {
 
           <button
             type='submit'
-            className='bg-[#DFB700] text-black p-2 rounded-md font-bold text-lg hover:scale-95 transition'
+            className='bg-yellow-400 text-black p-2 rounded-md font-bold text-lg hover:bg-yellow-500 transition-colors'
           >
             confirm Changes
           </button>

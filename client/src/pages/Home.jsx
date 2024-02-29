@@ -10,8 +10,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 
 const Home = () => {
-  const { isAuthenticated, checkIfIsAuthenticated } = useContext(UserContext);
+  const { checkIfIsAuthenticated } = useContext(UserContext);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
   const toggleDropdown = () => {
@@ -20,14 +21,15 @@ const Home = () => {
 
   useEffect(() => {
     const check = async () => {
-      const checkResult = await checkIfIsAuthenticated();
-      if (!checkResult) {
-        navigate('/');
+      const checkIsAuth = await checkIfIsAuthenticated();
+      if (checkIsAuth) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
       }
     };
     check();
-    console.log(isAuthenticated);
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <div className='min-h-screen w-full bg-gray-800 text-white relative'>
@@ -89,11 +91,28 @@ const Home = () => {
           intertwine, shaping a world of{' '}
           <span className='underline'>possibilities</span>.
         </p>
+
         <Link
           to={isAuthenticated ? '/main' : '/login'}
-          className='bg-[#DFB700] p-1 rounded-md lg:p-2 lg:text-xl text-black font-bold delay-75 duration-200 hover:scale-95 transition'
+          className='relative inline-flex items-center px-12 py-3 overflow-hidden text-lg font-medium bg-yellow-400 text-black border border-black hover:border-yellow-400 rounded-lg hover:text-yellow-400 group hover:bg-gray-800'
         >
-          Get started
+          <span className='absolute right-0 flex items-center justify-start w-10 h-10 duration-300 transform translate-x-full group-hover:translate-x-0 ease'>
+            <svg
+              className='w-5 h-10'
+              fill='none'
+              stroke='currentColor'
+              viewBox='0 0 24 24'
+              xmlns='http://www.w3.org/2000/svg'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth='2'
+                d='M14 5l7 7m0 0l-7 7m7-7H3'
+              ></path>
+            </svg>
+          </span>
+          <span className='relative'>Get started</span>
         </Link>
       </div>
 

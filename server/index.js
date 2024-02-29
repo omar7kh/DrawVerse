@@ -3,7 +3,8 @@ import 'dotenv/config';
 import connectMongoose from './utils/connectMongoose.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
-import routeProvider from './routes/userRouter.js';
+import userRouter from './routes/userRouter.js';
+import boardRouter from './routes/boardRouter.js';
 
 const PORT = process.env.PORT || 3000;
 const BDConnect = connectMongoose();
@@ -19,7 +20,8 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(routeProvider);
+app.use(userRouter);
+app.use(boardRouter);
 
 if (await BDConnect) {
   console.log('MongoDB Connect');

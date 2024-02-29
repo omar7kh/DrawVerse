@@ -3,11 +3,19 @@ import { IoIosAlbums } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import { IoMdCloseCircle } from 'react-icons/io';
 import { UserContext } from '../context/UserContext';
+import { RoomProvider } from '../../liveblocks.config';
+import { ClientSideSuspense } from '@liveblocks/react';
+import { Room } from '../components';
+import { useParams } from 'react-router-dom';
 
 const WhiteBoard = () => {
-  const { isAuthenticated, checkIfIsAuthenticated } = useContext(UserContext);
+  const { isAuthenticated, checkIfIsAuthenticated, boardId } =
+    useContext(UserContext);
   const navigate = useNavigate();
   const [isInvite, setIsInvite] = useState(false);
+
+  const { id } = useParams();
+  console.log(id);
 
   useEffect(() => {
     const check = async () => {
@@ -61,11 +69,15 @@ const WhiteBoard = () => {
         )}
 
         <div className='h-[calc(100vh-64px)] w-full flex justify-between'>
-          <aside className='bg-zinc-700 h-full w-[280px] border-r'></aside>
-          <div className='w-full h-full bg-slate-100 inline-block'>
-            <p className='text-xl text-red-700'>Hello</p>
+          <aside className='bg-zinc-700 h-full w-[280px]'></aside>
+          <div className=' h-full bg-slate-300 inline-block'>
+            <RoomProvider id={id} initialPresence={{ cursor: null }}>
+              <ClientSideSuspense fallback={<div>Loading…</div>}>
+                {() => <Room />}
+              </ClientSideSuspense>
+            </RoomProvider>
           </div>
-          <aside className='bg-zinc-700 h-full w-[280px] border-l'></aside>
+          <aside className='bg-zinc-700 h-full w-[280px]'></aside>
         </div>
       </div>
     )

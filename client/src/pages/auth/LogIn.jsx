@@ -29,6 +29,7 @@ const LogIn = () => {
   const handleDataChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -37,9 +38,11 @@ const LogIn = () => {
       const res = await axios.post(`${backendApiUrl}/signin`, userData, {
         withCredentials: true,
       });
+
       if (res.data.error) {
         setUnauthenticatedMsg(() => res.data.error);
       }
+
       if (res.data.errors) {
         const errors = {};
         res.data.errors.forEach((error) => {
@@ -49,8 +52,10 @@ const LogIn = () => {
         setFieldErrors(errors);
         setLoading(false);
         setIsAuthTrue(false);
-        console.log(errors);
+        console.log(errors, 'logIn error');
       } else if (res.data.success) {
+        console.log('Successfully logged in');
+
         navigate('/main');
         const userId = res.data.userId;
         localStorage.setItem('userId', userId);
