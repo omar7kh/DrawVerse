@@ -11,15 +11,16 @@ import {
 } from "../pages/index.js";
 
 const router = createBrowserRouter([
-	{
-		element: <Root />,
-		children: [
-			{ path: "/", element: <Home /> },
-			{ path: "/login", element: <LogIn /> },
-			{ path: "/signup", element: <SignUp /> },
-			{ path: "/profile", element: <Profile /> },
-			{ path: "/whiteboard", element: <WhiteBoard /> },
-			{ path: "/main", element: <MainPage /> },
+  {
+    element: <Root />,
+    children: [
+      { path: '/', element: <Home /> },
+      { path: '/login', element: <LogIn /> },
+      { path: '/signup', element: <SignUp /> },
+      { path: '/profile', element: <Profile /> },
+      { path: '/whiteboard/:id', element: <WhiteBoard /> },
+      { path: '/main', element: <MainPage /> },
+
 
 			{
 				path: "*",

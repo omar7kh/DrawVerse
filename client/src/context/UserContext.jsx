@@ -1,44 +1,49 @@
-import { createContext, useEffect, useState } from "react";
-import cookie from "js-cookie";
-import axios from "axios";
+import { createContext, useEffect, useState } from 'react';
+import cookie from 'js-cookie';
+import { getRandomImage } from '../components/liveBlocks/Images';
+import { v4 as randomId } from 'uuid';
+import axios from 'axios';
+
 
 export const UserContext = createContext({});
 
 export const UserContextProvider = ({ children }) => {
-	const [userId, setUserId] = useState("");
-	const [loggedIn, setLoggedIn] = useState(true);
-	const [userData, setUserData] = useState({
+  const backendApiUrl =
+    import.meta.env.VITE_NODE_ENV === 'development'
+      ? 'http://localhost:3000'
+      : 'vercel';
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userId, setUserId] = useState('');
+  const [boards, setBoards] = useState([]);
+  const [userData, setUserData] = useState({
 		userName: "",
 		email: "",
 		password: "",
 		imageUrl: "",
 	});
-	const backendApiUrl =
-		import.meta.env.VITE_NODE_ENV === "development"
-			? "http://localhost:3000"
-			: "vercel";
 
-	const [isAuthenticated, setIsAuthenticated] = useState(
-		!loggedIn ? false : true
-	);
+  const handleIfUserHasToken = async () => {
+    let JWTInfoCookie = cookie.get('JWTinfo');
+    if (!JWTInfoCookie) return false;
 
-	const handleIfUserHasToken = () => {
-		let JWTinfocookie = cookie.get("JWTinfo");
+    JWTInfoCookie = JWTInfoCookie.replace('j:', '');
+    const cookieValueObj = JSON.parse(JWTInfoCookie);
 
-		if (!JWTinfocookie) return;
+    const getUserId = cookieValueObj.userId;
+    setUserId(getUserId);
 
 		JWTinfocookie = JWTinfocookie.replace("j:", "");
 		const cookieValueObj = JSON.parse(JWTinfocookie);
 		const expirationInMs = new Date(cookieValueObj.expires) - new Date();
 
-		setUserId(cookieValueObj.userId);
+    if (expirationInMs <= 0) return null;
 
-		if (expirationInMs <= 0) return;
-		return JWTinfocookie;
-	};
-	useEffect(() => {
-		handleIfUserHasToken();
-	}, []);
+    return JWTInfoCookie;
+  };
+
+  const checkIfIsAuthenticated = async () => {
+    const token = await handleIfUserHasToken();
+
 
 	const checkIfIsAuthenticated = async () => {
 		const token = handleIfUserHasToken();
@@ -55,43 +60,42 @@ export const UserContextProvider = ({ children }) => {
         setIsAuthenticated(false);
         return false;
       }
+    } else {
+      return false;
     }
   };
 
-		if (token) {
-			const res = await axios.post(
-				`${backendApiUrl}/isAuth`,
-				{ token },
-				{ withCredentials: true }
-			);
-			if (res.data.isAuth) {
-				setUserData({
-					userName: res.data.username,
-					email: res.data.email,
-				});
-				setIsAuthenticated(true);
-				return true;
-			} else {
-				return false;
-			}
-		}
-	};
+  // TODO: handleCreateBoard in separate file;
+  const handleCreateBoard = () => {
+    let newBoard = {
+      userId: userId,
+      boardId: randomId(),
+      name: 'untitled',
+      imageUrl: getRandomImage(),
+    };
 
-	return (
-		<UserContext.Provider
-			value={{
-				backendApiUrl,
-				isAuthenticated,
-				checkIfIsAuthenticated,
-				setIsAuthenticated,
-				userId,
-				setUserId,
-				setUserData,
+    axios.post(`${backendApiUrl}/createBoard`, {
+      newBoard,
+    });
+    return newBoard;
+  };
+
+  return (
+    <UserContext.Provider
+      value={{
+        backendApiUrl,
+        isAuthenticated,
+        checkIfIsAuthenticated,
+        setIsAuthenticated,
+        userId,
+        handleCreateBoard,
+        boards,
+        setBoards,
+    setUserData,
 				userData,
-				setLoggedIn,
-			}}
-		>
-			{children}
-		</UserContext.Provider>
-	);
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
 };

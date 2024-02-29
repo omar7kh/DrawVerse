@@ -10,7 +10,7 @@ import { FaRegEye } from "react-icons/fa";
 import { UserContext } from "../../context/UserContext";
 
 const LogIn = () => {
-	const { backendApiUrl, setUserId, userData, setUserData, setLoggedIn } =
+	const { backendApiUrl, setUserId, userData, setUserData } =
 		useContext(UserContext);
 	const navigate = useNavigate();
 
@@ -51,7 +51,6 @@ const LogIn = () => {
 				setLoading(false);
 				setIsAuthTrue(false);
 				console.log(errors);
-				setLoggedIn(false);
 			} else if (res.data.success) {
 				navigate("/main");
 				const userId = res.data.userId;
