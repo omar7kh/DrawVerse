@@ -22,10 +22,10 @@ app.use(
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(upload.array());
 
 app.use(userRouter);
 app.use(boardRouter);
-app.use(upload.single());
 
 if (await BDConnect) {
 	console.log("MongoDB Connect");

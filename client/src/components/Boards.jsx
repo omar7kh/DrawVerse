@@ -7,7 +7,6 @@ import axios from "axios";
 import EmptyBoards from "./EmptyBoards";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteBoard from "./DeleteBoard";
-
 const Boards = () => {
 	const { userId, backendApiUrl, handleCreateBoard, boards, setBoards } =
 		useContext(UserContext);
@@ -15,7 +14,6 @@ const Boards = () => {
 	const [isEditBoard, setIsEditBoard] = useState(false);
 	const [isDeleteBoard, setIsDeleteBoard] = useState(false);
 	const [isBoard, seIsBoard] = useState(false);
-
 	const navigate = useNavigate();
 	const toggleEditBoard = (boardId) => {
 		setEditBoardData((prevData) => ({
@@ -23,7 +21,6 @@ const Boards = () => {
 			id: boardId === editBoardData.id ? null : boardId,
 		}));
 	};
-
 	useEffect(() => {
 		axios
 			.post(
@@ -35,7 +32,7 @@ const Boards = () => {
 			)
 			.then((res) => {
 				setBoards(res.data.boards);
-				if (res.data.boards) {
+				if (res.data.boards.length) {
 					seIsBoard(false);
 				} else {
 					seIsBoard(true);
@@ -45,18 +42,14 @@ const Boards = () => {
 				console.log(err);
 			});
 	}, [isDeleteBoard, isEditBoard]);
-
 	// todo: this function should be in separate file
 	const updateBoard = () => {
 		const newBoard = handleCreateBoard();
-
 		setBoards([...boards, newBoard]);
 	};
-
 	if (isBoard) {
 		return <EmptyBoards seIsBoard={seIsBoard} />;
 	}
-
 	return (
 		<div className="grid grid-cols-1 px-16 my-10 gap-5 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
 			{boards.length ? (
@@ -72,7 +65,6 @@ const Boards = () => {
 					</span>
 				</div>
 			) : null}
-
 			{boards &&
 				boards.map((board) => {
 					return (
@@ -86,13 +78,11 @@ const Boards = () => {
 									alt="board-image"
 									className="w-[300px] h-[200px] object-fill rounded-t-md"
 								/>
-
 								<p className="p-2 text-black font-medium">
 									{board.name.length > 15
 										? `${board.name.slice(0, 15)}...`
 										: board.name[0].toLocaleUpperCase() + board.name.slice(1)}
 								</p>
-
 								<HiOutlineDotsVertical
 									className="hidden group-hover:block absolute top-2 right-2 z-10 text-xl bg-black rounded-full w-6 h-6 p-1"
 									onClick={(e) => {
@@ -100,7 +90,6 @@ const Boards = () => {
 										toggleEditBoard(board.boardId);
 									}}
 								/>
-
 								{editBoardData.id === board.boardId && (
 									<ul className="hidden group-hover:block h-fit p-2 text-xs z-10 bg-gray-800 rounded-md absolute top-8 right-4">
 										<li
@@ -131,17 +120,14 @@ const Boards = () => {
 										</li>
 									</ul>
 								)}
-
 								<div className="absolute inset-0 h-full w-full opacity-0 group-hover:opacity-50 transition-opacity bg-black" />
 							</div>
-
 							{isEditBoard && (
 								<EditBoard
 									setIsEditBoard={setIsEditBoard}
 									boardData={editBoardData}
 								/>
 							)}
-
 							{isDeleteBoard && (
 								<DeleteBoard
 									setIsDeleteBoard={setIsDeleteBoard}
@@ -154,5 +140,4 @@ const Boards = () => {
 		</div>
 	);
 };
-
 export default Boards;

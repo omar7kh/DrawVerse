@@ -19,6 +19,8 @@ const Profile = () => {
 		setUserData,
 		userData,
 		checkIfIsAuthenticated,
+		currentUser,
+		setCurrentUser,
 	} = useContext(UserContext);
 
 	const navigate = useNavigate();
@@ -26,12 +28,6 @@ const Profile = () => {
 	const [isChanged, setIsChanged] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
 	const fileInputRef = useRef(null);
-	const [currentUser, setCurrentUser] = useState({
-		username: "",
-		email: "",
-		image: "",
-		password: "",
-	});
 
 	useEffect(() => {
 		const check = async () => {
@@ -69,34 +65,6 @@ const Profile = () => {
 			console.error("Fehler beim Aktualisieren des Profils:", error);
 		}
 	};
-
-	useEffect(() => {
-		// wird dreimal ausgeführt TODO: Checken!!!!!!!!!
-		const getUser = async () => {
-			if (!userId) {
-				// console.warn(test);
-				console.error("userId not set");
-				return;
-			}
-			try {
-				const res = await axios.get(`${backendApiUrl}/getUser/${userId}`);
-				const imageFromRes = res.data.imageUrl;
-				const dataUrl = `data:image/png;base64,${imageFromRes}`;
-				setCurrentUser({
-					username: res.data.username,
-					email: res.data.email,
-					image: !imageFromRes
-						? dataUrl.replace(/^data:image\/[a-z]+;base64,/, "")
-						: dataUrl,
-				});
-				setIsChanged(true);
-			} catch (error) {
-				console.error("Error fetching user data:", error);
-			}
-		};
-
-		getUser();
-	}, [userId, currentUser.image]);
 
 	const handleFormChange = (e) => {
 		e.preventDefault();
@@ -157,6 +125,7 @@ const Profile = () => {
 			}
 		};
 		reader.readAsDataURL(imageFile);
+		console.log(reader);
 	};
 
 	if (isAuthenticated) {
@@ -214,10 +183,7 @@ const Profile = () => {
 					onChange={handleImageChange}
 					className="hidden"
 				/>
-				<div className="flex flex-col w-[350px] h-20 justify-center mx-auto size-6  ">
-					<p>Username: {currentUser.username}</p>
-					<p>Email-adress: {currentUser.email}</p>
-				</div>
+
 				<form
 					onSubmit={handleFormRequest}
 					className="w-[400px] pb-10 lg:w-[550px] mx-auto flex flex-col gap-5 justify-center items-center"
@@ -225,11 +191,11 @@ const Profile = () => {
 					<div className="flex flex-col w-full">
 						<label htmlFor="userName">User Name</label>
 						<input
-							className="w-full h-10 px-5 py-3 border-2 border-gray-800 text-black rounded-md"
+							className="w-full h-10 px-5 py-3 border-2 border-gray-800 text-black rounded-md placeholder:text-black"
 							type="text"
 							name="userName"
 							id="userName"
-							placeholder="Max Mustermann"
+							placeholder={currentUser.username}
 							onChange={(e) => handleFormChange(e)}
 							autoComplete="on"
 						/>
@@ -238,11 +204,11 @@ const Profile = () => {
 					<div className="flex flex-col w-full">
 						<label htmlFor="email">Email</label>
 						<input
-							className="w-full h-10 px-5 py-3 border-2 border-gray-800 text-black rounded-md"
+							className="w-full h-10 px-5 py-3 border-2 border-gray-800 text-black rounded-md placeholder:text-black"
 							type="email"
 							name="email"
 							id="email"
-							placeholder="example@gmail.com"
+							placeholder={currentUser.email}
 							onChange={(e) => handleFormChange(e)}
 							autoomplete="on"
 						/>
@@ -255,7 +221,7 @@ const Profile = () => {
 							type={showPassword ? "text" : "password"}
 							name="password"
 							id="password"
-							placeholder="New Password"
+							placeholder="Password"
 							onChange={(e) => handleFormChange(e)}
 						/>
 						{!showPassword ? (
