@@ -42,6 +42,21 @@ export const UserContextProvider = ({ children }) => {
 
 	const checkIfIsAuthenticated = async () => {
 		const token = handleIfUserHasToken();
+    if (token) {
+      const res = await axios.post(
+        `${backendApiUrl}/isAuth`,
+        { token },
+        { withCredentials: true }
+      );
+      if (res.data.isAuth) {
+        setIsAuthenticated(true);
+        return true;
+      } else {
+        setIsAuthenticated(false);
+        return false;
+      }
+    }
+  };
 
 		if (token) {
 			const res = await axios.post(

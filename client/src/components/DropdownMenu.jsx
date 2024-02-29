@@ -1,29 +1,17 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import axios from 'axios';
-import Cookies from 'js-cookie';
 
 const DropdownMenu = () => {
   const navigate = useNavigate();
+
   const {
     backendApiUrl,
     isAuthenticated,
     checkIfIsAuthenticated,
     setIsAuthenticated,
   } = useContext(UserContext);
-
-  useEffect(() => {
-    setIsAuthenticated(false);
-    const check = async () => {
-      const checkResult = await checkIfIsAuthenticated();
-
-      if (!checkResult) {
-        navigate('/');
-      }
-    };
-    check();
-  }, []);
 
   const handleLogout = () => {
     const axiosInstance = axios.create({
@@ -32,7 +20,8 @@ const DropdownMenu = () => {
     axiosInstance
       .post(`${backendApiUrl}/logout`)
       .then((res) => {
-        navigate('/login');
+        setIsAuthenticated(false);
+        navigate('/');
         console.log(res);
       })
       .catch((err) => {
@@ -41,7 +30,7 @@ const DropdownMenu = () => {
   };
 
   return (
-    <div className='absolute top-16 right-16 bg-gray-800 p-2 rounded-lg border border-[#DFB700]'>
+    <div className={` bg-gray-800 p-2 rounded-lg border border-[#DFB700]`}>
       <ul className='text-white'>
         {!isAuthenticated ? (
           <>
