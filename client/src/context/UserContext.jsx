@@ -2,8 +2,8 @@ import { createContext, useEffect, useState } from 'react';
 import cookie from 'js-cookie';
 import { getRandomImage } from '../components/liveBlocks/Images';
 import { v4 as randomId } from 'uuid';
-
 import axios from 'axios';
+
 
 export const UserContext = createContext({});
 
@@ -15,6 +15,12 @@ export const UserContextProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState('');
   const [boards, setBoards] = useState([]);
+  const [userData, setUserData] = useState({
+		userName: "",
+		email: "",
+		password: "",
+		imageUrl: "",
+	});
 
   const handleIfUserHasToken = async () => {
     let JWTInfoCookie = cookie.get('JWTinfo');
@@ -26,7 +32,9 @@ export const UserContextProvider = ({ children }) => {
     const getUserId = cookieValueObj.userId;
     setUserId(getUserId);
 
-    const expirationInMs = new Date(cookieValueObj.expires) - new Date();
+		JWTinfocookie = JWTinfocookie.replace("j:", "");
+		const cookieValueObj = JSON.parse(JWTinfocookie);
+		const expirationInMs = new Date(cookieValueObj.expires) - new Date();
 
     if (expirationInMs <= 0) return null;
 
@@ -36,6 +44,9 @@ export const UserContextProvider = ({ children }) => {
   const checkIfIsAuthenticated = async () => {
     const token = await handleIfUserHasToken();
 
+
+	const checkIfIsAuthenticated = async () => {
+		const token = handleIfUserHasToken();
     if (token) {
       const res = await axios.post(
         `${backendApiUrl}/isAuth`,
@@ -80,6 +91,8 @@ export const UserContextProvider = ({ children }) => {
         handleCreateBoard,
         boards,
         setBoards,
+    setUserData,
+				userData,
       }}
     >
       {children}
