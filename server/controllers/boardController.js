@@ -3,15 +3,6 @@ import Board from '../models/boardSchema.js';
 export const createBoard = async (req, res) => {
   const { userId, boardId, name, imageUrl } = req.body.newBoard;
 
-  // TODO Date should be in schema format
-  // const currentDate = new Date();
-
-  // const day = String(currentDate.getDate()).padStart(2, '0');
-  // const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-  // const year = currentDate.getFullYear();
-
-  // const date = `${day}.${month}.${year}`;
-
   try {
     let userBoard = await Board.findOne({ userId: userId });
     console.log(userBoard, 'userBoard');
@@ -20,7 +11,6 @@ export const createBoard = async (req, res) => {
         boardId,
         name,
         imageUrl,
-        createdAt: date,
       };
       userBoard.boards.push(newBoard);
       await userBoard.save();
