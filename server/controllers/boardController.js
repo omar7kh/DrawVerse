@@ -54,7 +54,7 @@ export const fetchBoard = async (req, res) => {
 		if (userBoard) {
 			res.status(200).json({ boards: userBoard.boards });
 		} else {
-			res.status(200).json({ msg: "No boards found" });
+			res.status(500).json({ msg: "No boards found" });
 		}
 	} catch (error) {
 		res.status(500).json({ error: error.message });
