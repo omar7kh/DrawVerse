@@ -35,7 +35,6 @@ const MainPage = () => {
 
 		check();
 	}, [isAuthenticated]);
-
 	return (
 		<div className="min-h-full w-full bg-[#1F2937] text-white">
 			{isAuthenticated && (

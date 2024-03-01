@@ -123,6 +123,7 @@ const LogIn = () => {
 									name="password"
 									placeholder="Enter your Password"
 									onChange={handleDataChange}
+									autoComplete="true"
 								/>
 								{showPassword ? (
 									<FaEyeSlash
