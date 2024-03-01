@@ -66,6 +66,34 @@ const Profile = () => {
 		}
 	};
 
+	useEffect(() => {
+		// wird dreimal ausgeführt TODO: Checken!!!!!!!!!
+		const getUser = async () => {
+			if (!userId) {
+				// console.warn(test);
+				console.error("userId not set");
+				return;
+			}
+			try {
+				const res = await axios.get(`${backendApiUrl}/getUser/${userId}`);
+				const imageFromRes = res.data.imageUrl;
+				const dataUrl = `data:image/png;base64,${imageFromRes}`;
+				setCurrentUser({
+					username: res.data.username,
+					email: res.data.email,
+					image: !imageFromRes
+						? dataUrl.replace(/^data:image\/[a-z]+;base64,/, "")
+						: dataUrl,
+				});
+				setIsChanged(true);
+			} catch (error) {
+				console.error("Error fetching user data:", error);
+			}
+		};
+
+		getUser();
+	}, [userId, currentUser.image]);
+
 	const handleFormChange = (e) => {
 		e.preventDefault();
 		setUserData({ ...userData, [e.target.name]: e.target.value });
@@ -128,6 +156,8 @@ const Profile = () => {
 		console.log(reader);
 	};
 
+	console.log("currentUser", currentUser);
+
 	if (isAuthenticated) {
 		return (
 			<div className="min-h-screen w-full bg-gray-800 text-white">
@@ -146,7 +176,9 @@ const Profile = () => {
 					/>
 					<div className="group w-[200px] h-[200px] absolute -bottom-16 ">
 						<img
-							src={!currentUser.image ? avatar : currentUser.image}
+							src={
+								currentUser.image === "undefined" ? avatar : currentUser.image
+							}
 							alt="avatar"
 							className=" w-full h-full object-cover rounded-full relative  group-hover:blur-sm"
 						/>
@@ -156,7 +188,7 @@ const Profile = () => {
 						/>
 						<button
 							onClick={handleDeletePhoto}
-							className="absolute right-20 top-24 bg-gray-800p-1 border-2 rounded-md hidden group-hover:block     "
+							className="absolute right-20 top-24 bg-gray-800p-1 border-2 rounded-md hidden group-hover:block"
 						>
 							Delete
 						</button>
@@ -169,81 +201,100 @@ const Profile = () => {
 						onClick={() => window.history.back()}
 					/>
 
-					<span className="text-center w-full font-semibold text-3xl">
-						Edit Profile
-					</span>
-				</div>
+					<input
+						type="file"
+						ref={fileInputRef}
+						id="image"
+						name="image"
+						accept="image/*"
+						onChange={handleImageChange}
+						className="hidden"
+					/>
 
-				<input
-					type="file"
-					ref={fileInputRef}
-					id="image"
-					name="image"
-					accept="image/*"
-					onChange={handleImageChange}
-					className="hidden"
-				/>
-
-				<form
-					onSubmit={handleFormRequest}
-					className="w-[400px] pb-10 lg:w-[550px] mx-auto flex flex-col gap-5 justify-center items-center"
-				>
-					<div className="flex flex-col w-full">
-						<label htmlFor="userName">User Name</label>
-						<input
-							className="w-full h-10 px-5 py-3 border-2 border-gray-800 text-black rounded-md placeholder:text-black"
-							type="text"
-							name="userName"
-							id="userName"
-							placeholder={currentUser.username}
-							onChange={(e) => handleFormChange(e)}
-							autoComplete="on"
-						/>
-					</div>
-
-					<div className="flex flex-col w-full">
-						<label htmlFor="email">Email</label>
-						<input
-							className="w-full h-10 px-5 py-3 border-2 border-gray-800 text-black rounded-md placeholder:text-black"
-							type="email"
-							name="email"
-							id="email"
-							placeholder={currentUser.email}
-							onChange={(e) => handleFormChange(e)}
-							autoomplete="on"
-						/>
-					</div>
-
-					<div className="flex flex-col w-full relative">
-						<label htmlFor="password">New Password</label>
-						<input
-							className="w-full h-10 pl-5 pr-8 py-3 border-2 border-gray-800 text-black rounded-md"
-							type={showPassword ? "text" : "password"}
-							name="password"
-							id="password"
-							placeholder="Password"
-							onChange={(e) => handleFormChange(e)}
-						/>
-						{!showPassword ? (
-							<FaEye
-								className="absolute bottom-3 right-3 text-black cursor-pointer"
-								onClick={() => setShowPassword(true)}
-							/>
-						) : (
-							<FaEyeSlash
-								className="absolute bottom-3 right-3 text-black cursor-pointer"
-								onClick={() => setShowPassword(false)}
-							/>
-						)}
-					</div>
-
-					<button
-						type="submit"
-						className="bg-[#DFB700] text-black p-2 rounded-md font-bold text-lg hover:scale-95 transition"
+					<form
+						onSubmit={handleFormRequest}
+						className="w-[400px] pb-10 lg:w-[550px] mx-auto flex flex-col gap-5 justify-center items-center"
 					>
-						confirm Changes
-					</button>
-				</form>
+						<div className="flex flex-col w-full">
+							<label htmlFor="userName">User Name</label>
+							<input
+								className="w-full h-10 px-5 py-3 border-2 border-gray-800 text-black rounded-md placeholder:text-black"
+								type="text"
+								name="userName"
+								id="userName"
+								placeholder={currentUser.username}
+								onChange={(e) => handleFormChange(e)}
+								autoComplete="on"
+							/>
+						</div>
+
+						<div className="flex flex-col w-full">
+							<label htmlFor="email">Email</label>
+							<input
+								className="w-full h-10 px-5 py-3 border-2 border-gray-800 text-black rounded-md placeholder:text-black"
+								type="email"
+								name="email"
+								id="email"
+								placeholder={currentUser.email}
+								onChange={(e) => handleFormChange(e)}
+								autoomplete="on"
+							/>
+						</div>
+
+						<div className="flex flex-col w-full relative">
+							<label htmlFor="password">New Password</label>
+							<input
+								className="w-full h-10 pl-5 pr-8 py-3 border-2 border-gray-800 text-black rounded-md"
+								type={showPassword ? "text" : "password"}
+								name="password"
+								id="password"
+								placeholder="Password"
+								onChange={(e) => handleFormChange(e)}
+							/>
+							{!showPassword ? (
+								<FaEye
+									className="absolute bottom-3 right-3 text-black cursor-pointer"
+									onClick={() => setShowPassword(true)}
+								/>
+							) : (
+								<FaEyeSlash
+									className="absolute bottom-3 right-3 text-black cursor-pointer"
+									onClick={() => setShowPassword(false)}
+								/>
+							)}
+						</div>
+
+						<div className="flex flex-col w-full relative">
+							<label htmlFor="password">New Password</label>
+							<input
+								className="w-full h-10 pl-5 pr-8 py-3 border-2 border-gray-800 text-black rounded-md"
+								type={showPassword ? "text" : "password"}
+								name="password"
+								id="password"
+								placeholder="New Password"
+								onChange={(e) => handleFormChange(e)}
+							/>
+							{!showPassword ? (
+								<FaEye
+									className="absolute bottom-3 right-3 text-black cursor-pointer"
+									onClick={() => setShowPassword(true)}
+								/>
+							) : (
+								<FaEyeSlash
+									className="absolute bottom-3 right-3 text-black cursor-pointer"
+									onClick={() => setShowPassword(false)}
+								/>
+							)}
+						</div>
+
+						<button
+							type="submit"
+							className="bg-[#DFB700] text-black p-2 rounded-md font-bold text-lg hover:scale-95 transition"
+						>
+							confirm Changes
+						</button>
+					</form>
+				</div>
 			</div>
 		);
 	}

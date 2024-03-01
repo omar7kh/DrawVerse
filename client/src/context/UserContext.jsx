@@ -20,12 +20,6 @@ export const UserContextProvider = ({ children }) => {
 		password: "",
 		imageUrl: "",
 	});
-	const [currentUser, setCurrentUser] = useState({
-		username: "",
-		email: "",
-		image: "",
-		password: "",
-	});
 
 	const handleIfUserHasToken = async () => {
 		let JWTInfoCookie = cookie.get("JWTinfo");
@@ -78,35 +72,6 @@ export const UserContextProvider = ({ children }) => {
 		return newBoard;
 	};
 
-	useEffect(() => {
-		// wird dreimal ausgeführt TODO: Checken!!!!!!!!!
-		const getUser = async () => {
-			if (!userId) {
-				// console.warn(test);
-				console.error("userId not set");
-				return;
-			}
-			try {
-				const res = await axios.get(`${backendApiUrl}/getUser/${userId}`);
-				const imageFromRes = res.data.imageUrl;
-				const dataUrl = `data:image/png;base64,${imageFromRes}`;
-
-				setCurrentUser({
-					username: res.data.username,
-					email: res.data.email,
-					image: !imageFromRes
-						? dataUrl.replace(/^data:image\/[a-z]+;base64,/, "")
-						: dataUrl,
-				});
-				console.log(res.data);
-			} catch (error) {
-				console.error("Error fetching user data:", error);
-			}
-		};
-
-		getUser();
-	}, [userId, currentUser.image]);
-
 	return (
 		<UserContext.Provider
 			value={{
@@ -120,8 +85,6 @@ export const UserContextProvider = ({ children }) => {
 				setBoards,
 				setUserData,
 				userData,
-				setCurrentUser,
-				currentUser,
 			}}
 		>
 			{children}
