@@ -1,7 +1,6 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import emptyImage from '../assets/images/empty-inbox-flatline.svg';
 import { UserContext } from '../context/UserContext';
-import axios from 'axios';
 
 const EmptyBoards = ({ seIsBoard }) => {
   const { backendApiUrl, handleCreateBoard, boards, setBoards, userId } =
