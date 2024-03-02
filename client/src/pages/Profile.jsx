@@ -60,12 +60,10 @@ const Profile = () => {
       console.error('Fehler beim Aktualisieren des Profils:', error);
     }
   };
-
   const handleFormChange = (e) => {
     e.preventDefault();
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
-
   const handleProfileImage = () => {
     fileInputRef.current.click();
   };
@@ -93,7 +91,6 @@ const Profile = () => {
       console.log('failed delete image', error);
     }
   };
-
   const handleImageChange = async (e) => {
     const imageFile = e.target.files[0];
     const reader = new FileReader();

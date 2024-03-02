@@ -121,6 +121,7 @@ export const updateProfile = async (req, res) => {
 export const updateImage = async (req, res) => {
   const { files, imageUrl } = req.body;
   const userId = req.params.userId;
+
   console.log('imageUrl', imageUrl);
   console.log('files', files);
 
