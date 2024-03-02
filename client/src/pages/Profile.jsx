@@ -21,10 +21,12 @@ const Profile = () => {
     currentUser,
     setCurrentUser,
   } = useContext(UserContext);
+
   const navigate = useNavigate();
   const [isChanged, setIsChanged] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const fileInputRef = useRef(null);
+
   useEffect(() => {
     const check = async () => {
       const checkIsAuth = await checkIfIsAuthenticated();
@@ -39,6 +41,7 @@ const Profile = () => {
     };
     check();
   }, [isAuthenticated]);
+
   const handleFormRequest = async (e) => {
     e.preventDefault();
     setCurrentUser({
@@ -57,13 +60,16 @@ const Profile = () => {
       console.error('Fehler beim Aktualisieren des Profils:', error);
     }
   };
+
   const handleFormChange = (e) => {
     e.preventDefault();
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
+
   const handleProfileImage = () => {
     fileInputRef.current.click();
   };
+
   const handleDeletePhoto = async () => {
     try {
       if (!currentUser.image) {
@@ -87,6 +93,7 @@ const Profile = () => {
       console.log('failed delete image', error);
     }
   };
+
   const handleImageChange = async (e) => {
     const imageFile = e.target.files[0];
     const reader = new FileReader();

@@ -70,23 +70,27 @@ export const UserContextProvider = ({ children }) => {
     return newBoard;
   };
   useEffect(() => {
-    // wird dreimal ausgeführt TODO: Checken!!!!!!!!!
     const getUser = async () => {
-      try {
-        const res = await axios.get(`${backendApiUrl}/getUser/${userId}`);
-        const imageFromRes = res.data.imageUrl;
-        const dataUrl = `data:image/png;base64,${imageFromRes}`;
+      if (userId) {
+        try {
+          const res = await axios.get(`${backendApiUrl}/getUser/${userId}`);
+          const imageFromRes = res.data.imageUrl;
+          const dataUrl = `data:image/png;base64,${imageFromRes}`;
 
-        setCurrentUser({
-          username: res.data.username,
-          email: res.data.email,
-          image: !imageFromRes
-            ? dataUrl.replace(/^data:image\/[a-z]+;base64,/, '')
-            : dataUrl,
-        });
-        console.log(res.data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
+          console.log('imageUrl', res.data.imageUrl);
+          console.log('dataUrl', dataUrl);
+
+          setCurrentUser({
+            username: res.data.username,
+            email: res.data.email,
+            image: !imageFromRes
+              ? dataUrl.replace(/^data:image\/[a-z]+;base64,/, '')
+              : dataUrl,
+          });
+          console.log('res.data', res.data);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
       }
     };
     getUser();
