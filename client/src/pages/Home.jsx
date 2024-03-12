@@ -13,7 +13,6 @@ const Home = () => {
   const { checkIfIsAuthenticated } = useContext(UserContext);
   const [showDropdown, setShowDropdown] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -35,9 +34,9 @@ const Home = () => {
     <div className='min-h-screen w-full bg-gray-800 text-white relative'>
       <nav className='flex justify-between items-center px-5 h-20 z-50 absolute inset-x-0 lg:px-16'>
         <Logo
-          width={40}
-          height={40}
-          textClasses='font-bold text-sm md:text-xl lg:text-2xl'
+          width={35}
+          height={35}
+          textClasses='font-bold text-sm md:text-lg lg:text-xl'
         />
         <IoPerson
           className='text-xl md:text-2xl lg:text-3xl cursor-pointer'

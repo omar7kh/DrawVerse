@@ -30,7 +30,9 @@ const DropdownMenu = () => {
   };
 
   return (
-    <div className={` bg-gray-800 p-2 rounded-lg border border-[#DFB700]`}>
+    <div
+      className={` bg-gray-800 p-2 rounded-lg border border-black shadow-xl`}
+    >
       <ul className='text-white'>
         {!isAuthenticated ? (
           <>

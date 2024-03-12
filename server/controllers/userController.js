@@ -1,8 +1,8 @@
 import User from '../models/userSchema.js';
+import Board from '../models/boardSchema.js';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
-import fs from 'fs';
 
 export const userSignUp = async (req, res) => {
   const { username, email, password } = req.body;
@@ -14,8 +14,6 @@ export const userSignUp = async (req, res) => {
     email,
     password: hashedPassword,
   });
-
-  console.log(req.body);
 
   try {
     if (!newUser) {
@@ -95,7 +93,6 @@ export const Logout = async (req, res) => {
 export const updateProfile = async (req, res) => {
   const { email, username, password } = req.body;
   const userId = req.params.userId;
-  console.log('userID', userId);
 
   const updateObj = {
     username: username,
@@ -108,7 +105,7 @@ export const updateProfile = async (req, res) => {
     const result = await User.findByIdAndUpdate(userId, updateObj, {
       new: true,
     });
-    console.log(result);
+
     if (!result) {
       res.status(404).send('User not exists');
     } else {
@@ -121,9 +118,6 @@ export const updateProfile = async (req, res) => {
 export const updateImage = async (req, res) => {
   const { files, imageUrl } = req.body;
   const userId = req.params.userId;
-
-  console.log('imageUrl', imageUrl);
-  console.log('files', files);
 
   try {
     const updatedUser = await User.findByIdAndUpdate(
@@ -174,6 +168,119 @@ export const getUserInfo = async (req, res) => {
     } else {
       res.status(200).json(getUser);
     }
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+export const getUsers = async (req, res) => {
+  const { findEmail } = req.query;
+  const { userId } = req.params;
+
+  if (findEmail) {
+    try {
+      const getUser = await User.findOne({
+        email: findEmail,
+        _id: { $ne: userId },
+      });
+
+      if (!getUser) {
+        res.status(402).json({ success: false, msg: 'User not found' });
+      } else {
+        res.status(200).json({ email: getUser.email, id: getUser._id });
+      }
+    } catch (error) {
+      res.status(500).json({ success: false, mag: error.message });
+    }
+  } else {
+    res.status(400).json({ success: false, msg: 'email is required' });
+  }
+};
+
+export const invite = async (req, res) => {
+  const { invitedUserEmail, boardId, userId } = req.body;
+
+  try {
+    const userBoards = await Board.findOne({ userId });
+
+    if (!userBoards) {
+      return res
+        .status(404)
+        .json({ success: false, error: 'User boards not found' });
+    }
+
+    const getInvitedUser = await User.findOne({ email: invitedUserEmail });
+
+    if (!getInvitedUser) {
+      return res
+        .status(404)
+        .json({ success: false, msg: 'Invited user not found' });
+    }
+
+    const board = userBoards.boards.find((b) => b.boardId === boardId);
+
+    if (!board) {
+      return res.status(404).json({ success: false, msg: 'Board not found' });
+    }
+
+    const isMember = board.members.some(
+      (member) => member === getInvitedUser._id.toString()
+    );
+
+    if (isMember) {
+      return res.status(400).json({
+        success: false,
+        msg: 'User is already a member of this board',
+      });
+    }
+
+    const handleNotifications = getInvitedUser.notifications;
+    handleNotifications.push({ from: userId, boardId: boardId });
+
+    await getInvitedUser.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'User invited successfully',
+      invitedUserId: getInvitedUser._id,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+};
+
+export const notifications = async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+    const user = await User.findById(userId);
+
+    if (!user) {
+      res.status(404).json({ success: false, error: 'User not found' });
+    }
+    const notificationsData = await Promise.all(
+      user.notifications.map(async (notification) => {
+        const getSender = await User.findById(notification.from);
+        const getBoard = await Board.findOne({
+          userId: getSender._id,
+        });
+
+        const getBoardName = getBoard.boards.find(
+          (board) => board.boardId === notification.boardId
+        );
+
+        return {
+          boardId: getBoardName.boardId,
+          senderId: getSender._id,
+          senderName: getSender.username,
+          senderImgUrl: getSender.imageUrl,
+          boardName: getBoardName.name,
+          receiverId: userId,
+        };
+      })
+    );
+
+    res.status(200).json(notificationsData);
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

@@ -91,6 +91,8 @@ const Profile = () => {
       console.log('failed delete image', error);
     }
   };
+  console.log(currentUser);
+
   const handleImageChange = async (e) => {
     const imageFile = e.target.files[0];
     const reader = new FileReader();
@@ -130,10 +132,10 @@ const Profile = () => {
             />
           </div>
           <Logo
-            width={40}
-            height={40}
-            textClasses='font-bold text-sm md:text-xl lg:text-2xl'
-            divStyle='absolute left-16 top-5'
+            width={35}
+            height={35}
+            textClasses='font-bold text-sm md:text-lg lg:text-xl'
+            divStyle='absolute left-16 top-[22.5px]'
           />
           <div className='group w-[200px] h-[200px] absolute -bottom-16 '>
             <img

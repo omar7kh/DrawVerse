@@ -8,6 +8,10 @@ import EditBoard from './EditBoard';
 import Room from './liveBlocks/Room';
 import Cursor from './liveBlocks/Cursor';
 import DeleteBoard from './DeleteBoard';
+import Invite from './Invite';
+import Members from './Members';
+import NotificationsBox from './NotificationsBox';
+import NotificationResponse from './NotificationResponse';
 
 export {
   Root,
@@ -20,4 +24,8 @@ export {
   Room,
   Cursor,
   DeleteBoard,
+  Invite,
+  Members,
+  NotificationsBox,
+  NotificationResponse,
 };
