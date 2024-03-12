@@ -21,7 +21,9 @@ const DeleteBoard = ({ setIsDeleteBoard, boardData }) => {
       fetch(`https://api.liveblocks.io/v2/rooms/${boardData.id}`, {
         method: 'DELETE',
         headers: {
-          Authorization: `Bearer sk_dev_Ew1rmSSEu5u2oAFHFO5PnJXl0PFykgYcY8PBzUZutaZkigZvI13ulyN7t2XgdwDy`,
+          Authorization: `Bearer ${
+            import.meta.env.VITE_LIVE_BLOCKS_SECRET_KEY
+          }`,
         },
       })
         .then((response) => response.json())
