@@ -117,7 +117,8 @@ const Boards = () => {
                     ? `${board.name.slice(0, 15)}...`
                     : board.name[0].toLocaleUpperCase() + board.name.slice(1)}
                 </p>
-                {!board.members.includes(userId) ? (
+
+                {!board.members?.includes(userId) ? (
                   <HiOutlineDotsVertical
                     className='hidden group-hover:block absolute top-2 right-2 z-10 text-xl bg-black rounded-full w-6 h-6 p-1'
                     onClick={(e) => {
