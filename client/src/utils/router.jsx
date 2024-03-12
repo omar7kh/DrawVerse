@@ -1,14 +1,15 @@
-import { createBrowserRouter } from "react-router-dom";
-import { Root } from "../components";
+import { createBrowserRouter } from 'react-router-dom';
+import { Root } from '../components';
+
 import {
-	Home,
-	LogIn,
-	PageNotFound,
-	Profile,
-	SignUp,
-	WhiteBoard,
-	MainPage,
-} from "../pages/index.js";
+  Home,
+  LogIn,
+  PageNotFound,
+  Profile,
+  SignUp,
+  WhiteBoard,
+  MainPage,
+} from '../pages/index.js';
 
 const router = createBrowserRouter([
   {
@@ -21,13 +22,12 @@ const router = createBrowserRouter([
       { path: '/whiteboard/:id', element: <WhiteBoard /> },
       { path: '/main', element: <MainPage /> },
 
-
-			{
-				path: "*",
-				element: <PageNotFound />,
-			},
-		],
-	},
+      {
+        path: '*',
+        element: <PageNotFound />,
+      },
+    ],
+  },
 ]);
 
 export default router;

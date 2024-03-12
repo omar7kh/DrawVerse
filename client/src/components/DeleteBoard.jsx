@@ -17,6 +17,22 @@ const DeleteBoard = ({ setIsDeleteBoard, boardData }) => {
     // TODO: fix the res
     if (res.data.msg === 'Board deleted successfully') {
       setIsDeleteBoard(false);
+
+      fetch(`https://api.liveblocks.io/v2/rooms/${boardData.id}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer sk_dev_Ew1rmSSEu5u2oAFHFO5PnJXl0PFykgYcY8PBzUZutaZkigZvI13ulyN7t2XgdwDy`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          // Handle response (success/failure)
+        })
+        .catch((error) => {
+          console.log(error);
+          // Handle errors
+        });
     }
   };
 

@@ -3,15 +3,24 @@ import cookie from 'js-cookie';
 import { getRandomImage } from '../components/liveBlocks/Images';
 import { v4 as randomId } from 'uuid';
 import axios from 'axios';
+
 export const UserContext = createContext({});
+
 export const UserContextProvider = ({ children }) => {
   const backendApiUrl =
     import.meta.env.VITE_NODE_ENV === 'development'
       ? 'http://localhost:3000'
       : 'vercel';
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState('');
   const [boards, setBoards] = useState([]);
+  const [isMember, setIsMember] = useState(false);
+  const [socket, setSocket] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+  const [boardData, setBoardData] = useState({});
+  const [members, setMembers] = useState([]);
+
   const [userData, setUserData] = useState({
     userName: '',
     email: '',
@@ -77,9 +86,6 @@ export const UserContextProvider = ({ children }) => {
           const imageFromRes = res.data.imageUrl;
           const dataUrl = `data:image/png;base64,${imageFromRes}`;
 
-          console.log('imageUrl', res.data.imageUrl);
-          console.log('dataUrl', dataUrl);
-
           setCurrentUser({
             username: res.data.username,
             email: res.data.email,
@@ -87,7 +93,6 @@ export const UserContextProvider = ({ children }) => {
               ? dataUrl.replace(/^data:image\/[a-z]+;base64,/, '')
               : dataUrl,
           });
-          console.log('res.data', res.data);
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
@@ -95,6 +100,22 @@ export const UserContextProvider = ({ children }) => {
     };
     getUser();
   }, [userId, currentUser.image]);
+
+  useEffect(() => {
+    if (userId) {
+      const getNotifications = async () => {
+        try {
+          const res = await axios.get(
+            `${backendApiUrl}/getNotifications/${userId}`
+          );
+          setNotifications((prev) => [...prev, ...res.data]);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
+      getNotifications();
+    }
+  }, [userId]);
 
   return (
     <UserContext.Provider
@@ -111,6 +132,15 @@ export const UserContextProvider = ({ children }) => {
         userData,
         setCurrentUser,
         currentUser,
+        isMember,
+        setIsMember,
+        socket,
+        notifications,
+        setNotifications,
+        boardData,
+        setBoardData,
+        members,
+        setMembers,
       }}
     >
       {children}

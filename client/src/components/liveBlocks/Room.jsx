@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import {
   useBroadcastEvent,
   useEventListener,
@@ -8,6 +9,7 @@ import Cursor from './Cursor';
 
 const Room = () => {
   const [myPresence, updateMyPresence] = useMyPresence();
+  const roomRef = useRef();
 
   const others = useOthers();
   const broadcast = useBroadcastEvent();
@@ -15,7 +17,10 @@ const Room = () => {
   const userCount = others.length;
 
   const handlePointerMove = (e) => {
-    const cursor = { x: Math.floor(e.clientX), y: Math.floor(e.clientY) };
+    const cursor = {
+      x: Math.floor(e.clientX) - 2,
+      y: Math.floor(e.clientY) - 2,
+    };
     updateMyPresence({ cursor });
   };
 
@@ -32,12 +37,11 @@ const Room = () => {
 
   return (
     <div
-      className='w-[calc(100vw-560px)] h-screen bg-slate-100 text-black'
+      ref={roomRef}
+      className='w-full h-screen bg-slate-100 text-black'
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
     >
-      <div>There are {userCount} other user(s) online</div> Cursor:{' '}
-      {JSON.stringify(myPresence.cursor)}
       {others
         .filter((other) => other.presence.cursor !== null)
         .map(({ connectionId, presence }) => (

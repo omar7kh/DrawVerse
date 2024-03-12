@@ -7,14 +7,33 @@ import axios from 'axios';
 import EmptyBoards from './EmptyBoards';
 import { Link, useNavigate } from 'react-router-dom';
 import DeleteBoard from './DeleteBoard';
+import { SocketContext } from '../context/SocketContext';
 
 const Boards = () => {
-  const { userId, backendApiUrl, handleCreateBoard, boards, setBoards } =
-    useContext(UserContext);
+  const {
+    userId,
+    backendApiUrl,
+    handleCreateBoard,
+    boards,
+    setBoards,
+    setBoardData,
+  } = useContext(UserContext);
   const [editBoardData, setEditBoardData] = useState({ id: '', name: '' });
   const [isEditBoard, setIsEditBoard] = useState(false);
   const [isDeleteBoard, setIsDeleteBoard] = useState(false);
   const [isBoard, seIsBoard] = useState(false);
+  const { socket } = useContext(SocketContext);
+
+  socket.on('getInvitedBoards', (data) => {
+    setBoards([...boards, data]);
+  });
+
+  socket.on('removeMemberBoard', (boardId) => {
+    const updateBoards = boards.filter((board) => {
+      return board.boardId !== boardId;
+    });
+    setBoards(updateBoards);
+  });
 
   const navigate = useNavigate();
   const toggleEditBoard = (boardId) => {
@@ -36,15 +55,14 @@ const Boards = () => {
       .then((res) => {
         setBoards(res.data.boards);
         if (res.data.boards.length >= 1) {
-          console.log('response', res.data);
           seIsBoard(false);
         } else {
           setBoards([]);
           seIsBoard(true);
         }
       })
-      .catch((err) => {
-        console.log('-------------------------', err);
+      .catch((error) => {
+        console.log('error getBoards', error);
         setBoards([]);
         seIsBoard(true);
       });
@@ -60,7 +78,6 @@ const Boards = () => {
   if (isBoard) {
     return <EmptyBoards seIsBoard={seIsBoard} />;
   }
-  console.log('isBoard', isBoard);
 
   return (
     <div className='grid grid-cols-1 px-16 my-10 gap-5 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6'>
@@ -84,7 +101,10 @@ const Boards = () => {
             <React.Fragment key={board.boardId}>
               <div
                 className='group bg-slate-300 cursor-pointer relative rounded-md'
-                onClick={() => navigate(`/whiteboard/${board.boardId}`)}
+                onClick={() => {
+                  setBoardData(board);
+                  navigate(`/whiteboard/${board.boardId}`);
+                }}
               >
                 <img
                   src={board.imageUrl}
@@ -97,14 +117,15 @@ const Boards = () => {
                     ? `${board.name.slice(0, 15)}...`
                     : board.name[0].toLocaleUpperCase() + board.name.slice(1)}
                 </p>
-
-                <HiOutlineDotsVertical
-                  className='hidden group-hover:block absolute top-2 right-2 z-10 text-xl bg-black rounded-full w-6 h-6 p-1'
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    toggleEditBoard(board.boardId);
-                  }}
-                />
+                {!board.members.includes(userId) ? (
+                  <HiOutlineDotsVertical
+                    className='hidden group-hover:block absolute top-2 right-2 z-10 text-xl bg-black rounded-full w-6 h-6 p-1'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleEditBoard(board.boardId);
+                    }}
+                  />
+                ) : null}
 
                 {editBoardData.id === board.boardId && (
                   <ul className='hidden group-hover:block h-fit p-2 text-xs z-10 bg-gray-800 rounded-md absolute top-8 right-4'>
