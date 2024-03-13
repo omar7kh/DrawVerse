@@ -14,7 +14,7 @@ const NotificationsBox = ({ setIsNotificationOpen }) => {
           setIsNotificationOpen={setIsNotificationOpen}
         />
       ) : (
-        <div className='w-full h-full flex flex-col justify-center items-center gap-1'>
+        <div className='w-full h-full p-2 flex flex-col justify-center items-center gap-1'>
           <IoAlertCircleOutline className='text-2xl text-yellow-500' />
           <span className='text-xs'>There is no Notifications</span>
         </div>

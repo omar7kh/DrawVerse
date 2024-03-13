@@ -21,6 +21,8 @@ const Members = ({ boardId, isAdmin }) => {
         );
         setMembers(res.data);
       } catch (error) {
+        setMembers([]);
+
         console.log('fetching members error', error);
       }
     };
@@ -54,19 +56,21 @@ const Members = ({ boardId, isAdmin }) => {
             >
               {isAdmin && (
                 <div
-                  className='pt-4 text-center bg-red-700 text-[10px] font-bold w-full h-full absolute rounded-full cursor-pointer hidden group-hover:block hover:flex flex-col justify-center items-center'
+                  className='bg-red-700 text-[10px] w-full h-full absolute rounded-full cursor-pointer hidden group-hover:block'
                   onClick={() => handleRemoveMembers(member._id)}
                 >
-                  <span>Remove</span>
-                  <span>
-                    {member.username.length > 5
-                      ? `${member.username[0].toUpperCase()}${member.username.slice(
-                          1,
-                          5
-                        )}...`
-                      : member.username[0].toUpperCase() +
-                        member.username.slice(1)}
-                  </span>
+                  <div className='w-full h-full flex flex-col justify-center items-center'>
+                    <span>Remove</span>
+                    <span>
+                      {member.username.length > 5
+                        ? `${member.username[0].toUpperCase()}${member.username.slice(
+                            1,
+                            5
+                          )}...`
+                        : member.username[0].toUpperCase() +
+                          member.username.slice(1)}
+                    </span>
+                  </div>
                 </div>
               )}
               <img
