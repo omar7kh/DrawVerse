@@ -36,8 +36,12 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(upload.array());
 
-app.use(userRouter);
-app.use(boardRouter);
+app.use('/', userRouter);
+app.use('/', boardRouter);
+
+app.use('/', (req, res) => {
+  res.send('server is running');
+});
 
 if (await BDConnect) {
   console.log('MongoDB Connect');
