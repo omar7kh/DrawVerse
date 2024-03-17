@@ -10,7 +10,7 @@ export const UserContextProvider = ({ children }) => {
   const backendApiUrl =
     import.meta.env.VITE_NODE_ENV === 'development'
       ? 'http://localhost:3000'
-      : 'vercel';
+      : 'https://draw-verse.vercel.app/';
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState('');
