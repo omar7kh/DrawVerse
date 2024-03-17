@@ -13,19 +13,25 @@ const Members = ({ boardId, isAdmin }) => {
     setMembers([...members, data]);
   });
 
-  useEffect(() => {
-    const fetchMembers = async () => {
-      try {
-        const res = await axios.get(
-          `${backendApiUrl}/members/${boardId}/${userId}`
-        );
-        setMembers(res.data);
-      } catch (error) {
+  const fetchMembers = async () => {
+    try {
+      const res = await axios.get(
+        `${backendApiUrl}/members/${boardId}/${userId}`
+      );
+      if (res.data.status) {
+        setMembers(res.data.members);
+      } else {
         setMembers([]);
-
-        console.log('fetching members error', error);
+        console.log(res.data.msg);
       }
-    };
+    } catch (error) {
+      setMembers([]);
+
+      console.log('fetching members error', error);
+    }
+  };
+
+  useEffect(() => {
     isAdmin && fetchMembers();
   }, [isMember, isMemberRemoved]);
 
@@ -34,7 +40,12 @@ const Members = ({ boardId, isAdmin }) => {
       const res = await axios.delete(
         `${backendApiUrl}/deleteMember/${memberId}/${boardId}/${userId}`
       );
-      setIsMemberRemoved(!isMemberRemoved);
+      if (res.data.msg === 'Member removed successfully') {
+        console.log('fetchMembers');
+        fetchMembers();
+        setIsMemberRemoved(!isMemberRemoved);
+      }
+
       socket.emit('removeMember', { boardId, memberId });
     } catch (error) {
       console.log('delete member error', error);
@@ -44,15 +55,15 @@ const Members = ({ boardId, isAdmin }) => {
   return (
     members && (
       <div
-        className={`flex justify-center items-center gap-2 absolute ${
-          isAdmin ? 'right-36' : 'right-5'
+        className={`hidden md:flex justify-center items-center gap-2 ${
+          isAdmin ? 'mr-24' : ''
         } `}
       >
         {members.map((member) => {
           return (
             <div
               key={member._id}
-              className='group flex justify-center items-center w-12 h-12 rounded-full bg-green-800  relative'
+              className='group flex justify-center items-center w-12 h-12 rounded-full relative'
             >
               {isAdmin && (
                 <div

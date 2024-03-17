@@ -33,12 +33,12 @@ export const socketFunc = (io) => {
       if (!findSenderBoards) throw error;
       if (!findBoard) throw error;
 
-      io.to(receiver.socketId).emit('getNotifications', {
+      io.to(receiver?.socketId).emit('getNotifications', {
         senderId: findSender._id,
         senderName: findSender.username,
         senderImgUrl: findSender.imageUrl,
         boardName: findBoard.name,
-        receiverId: receiver.userId,
+        receiverId: receiver?.userId,
         boardId: boardId,
       });
     });
@@ -105,10 +105,23 @@ export const socketFunc = (io) => {
     });
 
     socket.on('removeMember', (data) => {
-      console.log(data);
       const member = getUser(data.memberId);
-      console.log(member.socketId);
       io.to(member.socketId).emit('removeMemberBoard', data.boardId);
+    });
+
+    socket.on('deleteBoard', async (boardId) => {
+      const getBoard = await Board.find();
+      getBoard.map((Board) => {
+        Board.boards.map((board) => {
+          if (board.boardId === boardId) {
+            board.members.map((member) => {
+              const memberData = getUser(member);
+
+              io.to(memberData.socketId).emit('deleteBoard', boardId);
+            });
+          }
+        });
+      });
     });
 
     socket.on('disconnect', () => {

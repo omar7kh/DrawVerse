@@ -26,6 +26,15 @@ const Boards = () => {
 
   socket.on('getInvitedBoards', (data) => {
     setBoards([...boards, data]);
+    seIsBoard(false);
+  });
+
+  socket?.on('deleteBoard', (boardId) => {
+    console.log('deleteBoard', boardId);
+    const updateBoards = boards.filter((board) => {
+      return board.boardId !== boardId;
+    });
+    setBoards(updateBoards);
   });
 
   socket.on('removeMemberBoard', (boardId) => {
@@ -53,6 +62,7 @@ const Boards = () => {
         }
       )
       .then((res) => {
+        console.log(res.data);
         setBoards(res.data.boards);
         if (res.data.boards.length >= 1) {
           seIsBoard(false);
@@ -75,19 +85,19 @@ const Boards = () => {
     setBoards([...boards, newBoard]);
   };
 
-  if (isBoard) {
+  if (isBoard || boards.length < 1) {
     return <EmptyBoards seIsBoard={seIsBoard} />;
   }
 
   return (
-    <div className='grid grid-cols-1 px-16 my-10 gap-5 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6'>
+    <div className='grid grid-cols-1 px-16 my-10 gap-5 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6'>
       {boards.length >= 1 && (
         <div
-          className='relative p-20 sm:p-0 max-h-[240px] rounded-md cursor-pointer flex flex-col justify-center items-center bg-black transition-colors group'
+          className='relative p-20 sm:p-0 rounded-md cursor-pointer flex flex-col justify-center items-center bg-black transition-colors group'
           onClick={updateBoard}
         >
           <span className='absolute w-0 h-0 transition-all duration-200 ease-linear bg-yellow-500 rounded-full group-hover:rounded-md group-hover:w-full group-hover:h-full'></span>
-          <span className='absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30 bg-gradient-to-b from-transparent via-transparent to-gray-700'></span>
+          <span className='absolute inset-0 w-full h-full -mt-1 rounded-lg opacity-30'></span>
           <FaPlus className='text-3xl group-hover:rotate-180 transition delay-75 duration-300 group-hover:text-black' />
           <span className='font-bold text-lg z-10 group-hover:text-black transition delay-75 duration-300'>
             New Board
@@ -159,13 +169,14 @@ const Boards = () => {
                   </ul>
                 )}
 
-                <div className='absolute inset-0 h-full w-full opacity-0 group-hover:opacity-50 transition-opacity bg-black' />
+                <div className='absolute inset-0 h-full w-full opacity-0 rounded-md group-hover:opacity-50 transition-opacity bg-black' />
               </div>
 
               {isEditBoard && (
                 <EditBoard
                   setIsEditBoard={setIsEditBoard}
                   boardData={editBoardData}
+                  toggleEditBoard={toggleEditBoard}
                 />
               )}
 

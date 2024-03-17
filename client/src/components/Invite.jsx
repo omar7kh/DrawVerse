@@ -60,7 +60,7 @@ const Invite = ({ setIsInvite }) => {
 
   return (
     <div
-      className={`w-[350px] ${
+      className={`w-[350px] shadow-xl border border-black z-50 ${
         invitedUserData || error ? 'h-[170px]' : 'h-[100px]'
       }  py-4 px-8 absolute bg-[#1F2937] right-16 top-20 rounded-md transition-all`}
     >
@@ -80,6 +80,7 @@ const Invite = ({ setIsInvite }) => {
             placeholder='search by email'
             className='p-1 w-full rounded-md text-black pr-7'
             ref={emailRef}
+            autoFocus={true}
           />
           <button
             type='submit'

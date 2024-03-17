@@ -1,16 +1,22 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { IoIosAlbums } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
 import { RoomProvider } from '../../liveblocks.config';
 import { ClientSideSuspense } from '@liveblocks/react';
-import { Invite, Members, Room } from '../components';
+import {
+  Invite,
+  LeftSideBar,
+  Members,
+  RightSideBar,
+  Room,
+} from '../components';
 import { useParams } from 'react-router-dom';
 import { SocketContext } from '../context/SocketContext';
-
 import axios from 'axios';
+import { LiveMap } from '@liveblocks/client';
 
-const WhiteBoard = ({ boards }) => {
+const WhiteBoard = () => {
   const {
     isAuthenticated,
     checkIfIsAuthenticated,
@@ -21,14 +27,26 @@ const WhiteBoard = ({ boards }) => {
   } = useContext(UserContext);
   const { socket } = useContext(SocketContext);
 
-  const navigate = useNavigate();
   const [isInvite, setIsInvite] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   const [boardName, setBoardName] = useState('boardName');
+  const [activeElement, setActiveElement] = useState({
+    name: '',
+    value: '',
+    icon: '',
+  });
 
+  const navigate = useNavigate();
   const { id } = useParams();
 
-  socket?.on('removeMemberBoard', (boardId) => {
+  const imageInputRef = useRef(null);
+  const selectedShapeRef = useRef(null);
+
+  socket?.on('removeMemberBoard', () => {
+    navigate('/main');
+  });
+
+  socket?.on('deleteBoard', () => {
     navigate('/main');
   });
 
@@ -75,8 +93,8 @@ const WhiteBoard = ({ boards }) => {
 
   return (
     isAuthenticated && (
-      <div className='h-screen w-full text-white overflow-hidden'>
-        <nav className='bg-[#1F2937] h-16 flex justify-between items-center px-5 lg:px-16 z-50 relative'>
+      <div className='h-full w-full text-white'>
+        <nav className='bg-[#1F2937] h-16 flex justify-between items-center px-5 lg:px-16 z-50 relative shadow-xl'>
           <div className='flex items-center gap-10'>
             <IoIosAlbums
               className='text-2xl cursor-pointer hover:text-[#DFB700] delay-75 duration-200'
@@ -86,9 +104,10 @@ const WhiteBoard = ({ boards }) => {
           </div>
 
           <Members boardId={id} isAdmin={isAdmin} />
+
           {isAdmin && (
             <button
-              className='bg-[#DFB700] text-black p-1 rounded-md font-medium'
+              className='bg-[#DFB700] text-black p-1 rounded-md font-medium absolute right-14'
               onClick={() => setIsInvite(true)}
             >
               Invite
@@ -98,10 +117,16 @@ const WhiteBoard = ({ boards }) => {
 
         {isInvite && <Invite setIsInvite={setIsInvite} />}
 
-        <div className='h-[calc(100vh-64px)] min-w-full flex justify-between'>
-          <aside className='bg-zinc-700 h-full w-[280px]'></aside>
+        <div className='h-[calc(100vh-64px)] w-full flex justify-between relative '>
           <div className='h-full w-full bg-slate-100'>
-            <RoomProvider id={id} initialPresence={{ cursor: null }}>
+            <RoomProvider
+              id={id}
+              initialPresence={{
+                cursor: null,
+                cursorColor: null,
+              }}
+              initialStorage={{ canvasObjects: new LiveMap() }}
+            >
               <ClientSideSuspense
                 fallback={
                   <div className='w-full h-full flex justify-center items-center'>
@@ -109,11 +134,17 @@ const WhiteBoard = ({ boards }) => {
                   </div>
                 }
               >
-                {() => <Room />}
+                {() => (
+                  <Room
+                    selectedShapeRef={selectedShapeRef}
+                    setActiveElement={setActiveElement}
+                    imageInputRef={imageInputRef}
+                    activeElement={activeElement}
+                  />
+                )}
               </ClientSideSuspense>
             </RoomProvider>
           </div>
-          <aside className='bg-zinc-700 h-full w-[280px]  '></aside>
         </div>
       </div>
     )

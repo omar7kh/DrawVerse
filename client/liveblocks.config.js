@@ -1,4 +1,4 @@
-import { createClient } from '@liveblocks/client';
+import { LiveMap, createClient } from '@liveblocks/client';
 import { createRoomContext } from '@liveblocks/react';
 
 const client = createClient({
@@ -6,6 +6,10 @@ const client = createClient({
   // authEndpoint: "/api/auth",
   throttle: 16,
 });
+
+Storage = {
+  canvasObjects: LiveMap,
+};
 
 export const {
   suspense: {
