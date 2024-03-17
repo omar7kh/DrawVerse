@@ -117,7 +117,7 @@ export const socketFunc = (io) => {
             board.members.map((member) => {
               const memberData = getUser(member);
 
-              io.to(memberData.socketId).emit('deleteBoard', boardId);
+              io.to(memberData?.socketId).emit('deleteBoard', boardId);
             });
           }
         });
