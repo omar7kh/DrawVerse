@@ -20,14 +20,14 @@ const app = express();
 const server = http.createServer(app);
 const io = new socketIo(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: 'https://draw-verse.vercel.app',
     methods: ['GET', 'POST'],
   },
 });
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://draw-verse.vercel.app',
     credentials: true,
   })
 );
