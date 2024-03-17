@@ -39,21 +39,25 @@ export const fetchBoard = async (req, res) => {
   const { userId } = req.body;
 
   let boards = [];
-  const getBoard = await Board.find();
-  getBoard.map((Board) => {
-    Board.boards.map((board) => {
-      board.members.map((member) => {
-        if (member === userId) {
-          boards.push(board);
-        }
-      });
-    });
-  });
 
   try {
+    const getBoard = await Board.find();
+    getBoard.map((Board) => {
+      Board.boards.map((board) => {
+        board.members.map((member) => {
+          if (member === userId) {
+            boards.push(board);
+          }
+        });
+      });
+    });
     const userBoard = await Board.findOne({ userId });
-    boards.push(...userBoard.boards);
+
     if (userBoard) {
+      boards.push(...userBoard.boards);
+    }
+
+    if (boards.length) {
       res.status(200).json({ boards: boards });
     } else {
       res.status(500).json({ msg: 'No boards found' });
@@ -174,9 +178,12 @@ export const members = async (req, res) => {
           return findMember;
         })
       );
-      res.status(200).json(membersData);
+      res.status(200).json({ status: true, members: membersData });
     } else {
-      res.status(400).json('there is no members');
+      res.status(200).json({
+        status: false,
+        msg: 'there is no members',
+      });
     }
   } catch (error) {
     console.error('Error by get members', error);

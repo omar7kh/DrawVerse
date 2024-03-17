@@ -1,41 +1,43 @@
 import axios from 'axios';
 import React, { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
+import { SocketContext } from '../context/SocketContext';
 
 const DeleteBoard = ({ setIsDeleteBoard, boardData }) => {
-  const { backendApiUrl, userId } = useContext(UserContext);
+  const { backendApiUrl, userId, members } = useContext(UserContext);
+  const { socket } = useContext(SocketContext);
 
   const closeDeleteBoard = () => {
     setIsDeleteBoard(false);
   };
 
   const handleDeleteBoard = async () => {
-    const res = await axios.delete(
-      `${backendApiUrl}/deleteBoard/${boardData.id}/${userId}`,
-      { withCredentials: true }
-    );
-    // TODO: fix the res
-    if (res.data.msg === 'Board deleted successfully') {
-      setIsDeleteBoard(false);
+    socket.emit('deleteBoard', boardData.id);
 
-      fetch(`https://api.liveblocks.io/v2/rooms/${boardData.id}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${
-            import.meta.env.VITE_LIVE_BLOCKS_SECRET_KEY
-          }`,
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          // Handle response (success/failure)
-        })
-        .catch((error) => {
-          console.log(error);
-          // Handle errors
-        });
+    try {
+      const res = await axios.delete(
+        `${backendApiUrl}/deleteBoard/${boardData.id}/${userId}`,
+        { withCredentials: true }
+      );
+
+      setIsDeleteBoard(false);
+    } catch (error) {
+      console.log(error);
     }
+
+    fetch(`https://api.liveblocks.io/v2/rooms/${boardData.id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${import.meta.env.VITE_LIVE_BLOCKS_SECRET_KEY}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   return (
