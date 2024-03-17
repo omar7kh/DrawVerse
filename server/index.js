@@ -20,14 +20,14 @@ const app = express();
 const server = http.createServer(app);
 const io = new socketIo(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:5173/',
     methods: ['GET', 'POST'],
   },
 });
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:5173/',
     credentials: true,
   })
 );
@@ -38,10 +38,6 @@ app.use(upload.array());
 
 app.use('/', userRouter);
 app.use('/', boardRouter);
-
-app.use('/', (req, res) => {
-  res.send('server is running');
-});
 
 if (await BDConnect) {
   console.log('MongoDB Connect');
