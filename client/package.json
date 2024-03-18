@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "proxy": "http://localhost:3000",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -10,9 +11,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@liveblocks/client": "^1.10.0",
+    "@liveblocks/react": "^1.10.0",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-select": "^2.0.0",
+    "@react-oauth/google": "^0.12.1",
+    "axios": "^1.6.7",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
+    "fabric": "^5.3.0",
+    "js-cookie": "^3.0.5",
+    "jspdf": "^2.5.1",
+    "lucide-react": "^0.358.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.22.0"
+    "react-icons": "^5.0.1",
+    "react-router-dom": "^6.22.0",
+    "socket.io-client": "^4.7.4",
+    "tailwind-merge": "^2.2.2",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.55",
