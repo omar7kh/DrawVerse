@@ -62,6 +62,15 @@ const Room = ({
   const fabricRef = useRef(null);
   const canvasRef = useRef(null);
 
+  const syncShapeInStorage = useMutation(({ storage }, object) => {
+    if (!object) return;
+    const { objectId } = object;
+    const shapeData = object.toJSON();
+    shapeData.objectId = objectId;
+    const canvasObjects = storage.get('canvasObjects');
+    canvasObjects.set(objectId, shapeData);
+  }, []);
+
   const handlePointerMove = useCallback((e) => {
     e.preventDefault();
 
@@ -74,20 +83,11 @@ const Room = ({
     }
   }, []);
 
-  const syncShapeInStorage = useMutation(({ storage }, object) => {
-    if (!object) return;
-    const { objectId } = object;
-    const shapeData = object.toJSON();
-    shapeData.objectId = objectId;
-    const canvasObjects = storage.get('canvasObjects');
-    canvasObjects.set(objectId, shapeData);
-  }, []);
-
   const handlePointerLeave = useCallback(() => {
     setCursorState({
       type: 'hidden',
     });
-    updateMyPresence({ cursor: null });
+    updateMyPresence({ cursor: null, message: null });
   }, []);
 
   const handlePointerDown = useCallback(
@@ -291,7 +291,7 @@ const Room = ({
       <div
         id='canvas'
         ref={roomRef}
-        className='w-full h-full bg-slate-100 text-black'
+        className='w-full md:w-[calc(100vw-400px)] h-full bg-slate-100 text-black'
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
         onPointerDown={handlePointerDown}

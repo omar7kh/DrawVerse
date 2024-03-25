@@ -5,7 +5,6 @@ import { Boards, DropdownMenu, Logo, NotificationsBox } from '../components';
 import avatar from '../assets/images/avatar.png';
 import '../index.css';
 import { IoMdNotifications } from 'react-icons/io';
-import { SocketContext } from '../context/SocketContext';
 
 const MainPage = () => {
   const {

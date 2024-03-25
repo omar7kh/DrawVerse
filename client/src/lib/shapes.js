@@ -2,7 +2,7 @@ import { fabric } from 'fabric';
 import { v4 as uuidv4 } from 'uuid';
 
 export const createRectangle = (pointer) => {
-  const rect = new fabric.Rect({
+  return new fabric.Rect({
     left: pointer.x,
     top: pointer.y,
     width: 100,
@@ -10,8 +10,6 @@ export const createRectangle = (pointer) => {
     fill: '#2d2e2d',
     objectId: uuidv4(),
   });
-
-  return rect;
 };
 
 export const createTriangle = (pointer) => {
@@ -29,7 +27,7 @@ export const createCircle = (pointer) => {
   return new fabric.Circle({
     left: pointer.x,
     top: pointer.y,
-    radius: 100,
+    radius: 50,
     fill: '#2d2e2d',
     objectId: uuidv4(),
   });
@@ -131,4 +129,20 @@ export const bringElement = ({ canvas, direction, syncShapeInStorage }) => {
   }
 
   syncShapeInStorage(selectedElement);
+};
+
+export const handleDelete = (canvas, deleteShapeFromStorage) => {
+  const activeObjects = canvas.getActiveObjects();
+  if (!activeObjects || activeObjects.length === 0) return;
+
+  if (activeObjects.length > 0) {
+    activeObjects.forEach((obj) => {
+      if (!obj.objectId) return;
+      canvas.remove(obj);
+      deleteShapeFromStorage(obj.objectId);
+    });
+  }
+
+  canvas.discardActiveObject();
+  canvas.requestRenderAll();
 };

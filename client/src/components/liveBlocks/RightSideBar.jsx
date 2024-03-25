@@ -33,7 +33,7 @@ const RightSideBar = ({
 
   const memoizedContent = useMemo(
     () => (
-      <section className='hidden bg-[#1F2937] xl:flex flex-col w-[250px] h-full select-none'>
+      <section className='hidden bg-[#1F2937] md:flex flex-col w-[200px] h-full select-none'>
         <h3 className='px-5 pt-4 text-xs uppercase border-b pb-1 text-center'>
           Design
         </h3>
