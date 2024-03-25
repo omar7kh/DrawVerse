@@ -41,7 +41,7 @@ export const getShapeInfo = (shapeType) => {
     case 'freeform':
       return {
         icon: '/icons/freeform.svg',
-        name: 'Free Drawing',
+        name: 'Draw',
       };
 
     default:
@@ -67,5 +67,5 @@ export const exportToPdf = () => {
 
   doc.addImage(data, 'PNG', 0, 0, canvas.width, canvas.height);
 
-  doc.save('DrawVerse.pdf');
+  doc.save('freeformVerse.pdf');
 };

@@ -22,7 +22,7 @@ export const shapeElements = [
 
   {
     icon: '/icons/freeform.svg',
-    name: 'Free Drawing',
+    name: 'Draw',
     value: 'freeform',
   },
 ];
