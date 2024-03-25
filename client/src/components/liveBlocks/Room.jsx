@@ -291,7 +291,7 @@ const Room = ({
       <div
         id='canvas'
         ref={roomRef}
-        className='w-full h-full bg-slate-100 text-black'
+        className='w-full md:w-[calc(100vw-400px)] h-full bg-slate-100 text-black'
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
         onPointerDown={handlePointerDown}
