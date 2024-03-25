@@ -1,7 +1,7 @@
 import { useMutation } from '../../../liveblocks.config';
 import { defaultNavElement, navElements } from '../../constants';
+import { handleDelete } from '../../lib/shapes';
 import ShapesMenu from './shapesMenu';
-import { handleDelete } from '../../lib/key-events.js';
 
 const ToolBar = ({
   fabricRef,

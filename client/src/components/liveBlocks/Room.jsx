@@ -62,6 +62,15 @@ const Room = ({
   const fabricRef = useRef(null);
   const canvasRef = useRef(null);
 
+  const syncShapeInStorage = useMutation(({ storage }, object) => {
+    if (!object) return;
+    const { objectId } = object;
+    const shapeData = object.toJSON();
+    shapeData.objectId = objectId;
+    const canvasObjects = storage.get('canvasObjects');
+    canvasObjects.set(objectId, shapeData);
+  }, []);
+
   const handlePointerMove = useCallback((e) => {
     e.preventDefault();
 
@@ -74,20 +83,11 @@ const Room = ({
     }
   }, []);
 
-  const syncShapeInStorage = useMutation(({ storage }, object) => {
-    if (!object) return;
-    const { objectId } = object;
-    const shapeData = object.toJSON();
-    shapeData.objectId = objectId;
-    const canvasObjects = storage.get('canvasObjects');
-    canvasObjects.set(objectId, shapeData);
-  }, []);
-
   const handlePointerLeave = useCallback(() => {
     setCursorState({
       type: 'hidden',
     });
-    updateMyPresence({ cursor: null });
+    updateMyPresence({ cursor: null, message: null });
   }, []);
 
   const handlePointerDown = useCallback(
