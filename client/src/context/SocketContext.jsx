@@ -10,6 +10,7 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     setSocket(io(backendApiUrl));
+    console.log(backendApiUrl);
   }, []);
 
   useEffect(() => {
