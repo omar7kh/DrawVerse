@@ -35,7 +35,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(upload.array());
 
-app.use('/', (req, res) => res.send('server is running'));
+app.get('/', (req, res) => res.send('server is running'));
 app.use('/', userRouter);
 app.use('/', boardRouter);
 
