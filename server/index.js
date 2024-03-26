@@ -19,14 +19,14 @@ const app = express();
 const server = http.createServer(app);
 const io = new socketIo(server, {
   cors: {
-    origin: process.env.NODE_ENV ? process.env.CLIENT_URL : process.env.CLIENT_DOMAIN,
+    origin: ["https://draw-verse-client-five.vercel.app"],
     methods: ['GET', 'POST'],
   },
 });
 
 app.use(
   cors({
-    origin: process.env.NODE_ENV ? process.env.CLIENT_URL : process.env.CLIENT_DOMAIN,
+    origin: ["https://draw-verse-client-five.vercel.app"],
     methods: ['POST', 'GET', 'PUT', 'DELETE'],
     credentials: true,
   })
