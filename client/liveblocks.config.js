@@ -3,7 +3,6 @@ import { createRoomContext } from '@liveblocks/react';
 
 const client = createClient({
   publicApiKey: import.meta.env.VITE_LIVE_BLOCKS,
-  // authEndpoint: "/api/auth",
   throttle: 16,
 });
 
