@@ -20,14 +20,14 @@ const app = express();
 const server = http.createServer(app);
 const io = new socketIo(server, {
   cors: {
-    origin: 'http://localhost:5173',
+    origin: process.env.NODE_ENV ? 'http://localhost:5173' : 'client domain',
     methods: ['GET', 'POST'],
   },
 });
 
 app.use(
   cors({
-    origin: 'http://localhost:5173',
+    origin: process.env.NODE_ENV ? 'http://localhost:5173' : 'client domain',
     credentials: true,
   })
 );
@@ -36,6 +36,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(upload.array());
 
+app.use('/', (req, res) => res.send('server is running'));
 app.use('/', userRouter);
 app.use('/', boardRouter);
 
