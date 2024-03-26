@@ -26,6 +26,7 @@ const io = new socketIo(server, {
 app.use(
   cors({
     origin: process.env.CLIENT_DOMAIN,
+    methods: ['POST', 'GET', 'PUT', 'DELETE'],
     credentials: true,
   })
 );
