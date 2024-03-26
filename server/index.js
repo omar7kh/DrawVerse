@@ -19,14 +19,14 @@ const app = express();
 const server = http.createServer(app);
 const io = new socketIo(server, {
   cors: {
-    origin: process.env.NODE_ENV ? process.env.CLIENT_URL : 'client domain',
+    origin: [process.env.NODE_ENV ? process.env.CLIENT_URL : 'client domain'],
     methods: ['GET', 'POST'],
   },
 });
 
 app.use(
   cors({
-    origin: process.env.NODE_ENV ? process.env.CLIENT_URL : 'client domain',
+    origin: [process.env.NODE_ENV ? process.env.CLIENT_URL : 'client domain'],
     credentials: true,
   })
 );
