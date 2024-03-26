@@ -23,7 +23,6 @@ const io = new socketIo(server, {
     methods: ['GET', 'POST'],
   },
 });
-
 app.use(
   cors({
     origin: process.env.CLIENT_DOMAIN,
