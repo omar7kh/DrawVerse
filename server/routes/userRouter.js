@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import {
-  Logout,
   deletePhoto,
   getUserInfo,
   updateImage,
@@ -23,7 +22,6 @@ router
   .post('/signup', signUpSchema, validateSchema, userSignUp)
   .post('/signIn', signInSchema, validateSchema, userSignIn)
   .post('/isAuth', isAuth)
-  .post('/logout', Logout)
   .post('/updateProfile/:userId', editSchema, validateSchema, updateProfile)
   .post('/updateImage/:userId', updateImage)
   .post('/deletePhoto/:userId', deletePhoto)

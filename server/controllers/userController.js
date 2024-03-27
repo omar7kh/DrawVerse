@@ -33,7 +33,7 @@ export const userSignIn = async (req, res) => {
     const loggedUser = await User.findOne({ email: email });
 
     if (!loggedUser) {
-      return res.send({
+      return res.json({
         success: false,
         error: 'User or Password are not correct',
       });
@@ -44,52 +44,28 @@ export const userSignIn = async (req, res) => {
       loggedUser.password
     );
     if (!comparedPassword) {
-      return res.send({
+      return res.json({
         success: false,
         error: 'User or Password are not correct',
       });
     }
-    const expiresInMs = 24 * 60 * 60 * 1000;
 
-    const expiresInDate = new Date(Date.now() + expiresInMs);
+    const token = jwt.sign({ userId: loggedUser._id }, process.env.JWT_SECRET);
 
-    const token = jwt.sign({ userId: loggedUser._id }, process.env.JWT_SECRET, {
-      expiresIn: expiresInMs,
-    });
-
-    const cookieOptions = {
-      httpOnly: true,
-      maxAge: expiresInMs,
-    };
-
-    res.cookie('jwt', token, cookieOptions);
-
-    const options = {
-      maxAge: expiresInMs,
-    };
-    const payload = {
-      expires: expiresInDate.toISOString(),
-      userId: loggedUser._id,
-    };
-    res.cookie('JWTinfo', payload, options);
-    return res.send({
+    return res.json({
       success: true,
       msg: 'User logged in',
       userId: loggedUser._id,
+      token,
     });
   } catch (error) {
-    res.status(500).send({
+    res.status(500).json({
       success: false,
       error: error.message,
     });
   }
 };
 
-export const Logout = async (req, res) => {
-  res.clearCookie('jwt');
-  res.clearCookie('JWTinfo');
-  res.send({ msg: 'successfully logged out' });
-};
 export const updateProfile = async (req, res) => {
   const { email, username, password } = req.body;
   const userId = req.params.userId;

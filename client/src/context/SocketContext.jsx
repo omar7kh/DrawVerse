@@ -10,7 +10,6 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     setSocket(io(backendApiUrl));
-    console.log(backendApiUrl);
   }, []);
 
   useEffect(() => {
@@ -21,7 +20,6 @@ export const SocketContextProvider = ({ children }) => {
 
   useEffect(() => {
     socket?.on('getNotifications', (data) => {
-      console.log(data);
       setNotifications((prev) => [...prev, data]);
     });
   }, [socket]);

@@ -23,7 +23,6 @@ const EditBoard = ({ setIsEditBoard, boardData, toggleEditBoard }) => {
       );
       setIsEditBoard(false);
       toggleEditBoard();
-      console.log(response.data.msg);
     } catch (error) {
       console.error('Error:', error);
     }

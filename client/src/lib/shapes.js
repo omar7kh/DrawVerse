@@ -95,7 +95,6 @@ export const modifyShape = ({
   syncShapeInStorage,
 }) => {
   const selectedElement = canvas.getActiveObject();
-  console.log('activeObjectRef.current', activeObjectRef.current);
 
   if (!selectedElement || selectedElement?.type === 'activeSelection') return;
 

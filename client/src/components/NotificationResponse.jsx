@@ -16,7 +16,6 @@ const NotificationResponse = ({ notifications, setIsNotificationOpen }) => {
   };
 
   socket.on('updatedNotifications', (data) => {
-    console.log(data);
     setNotifications(data);
   });
 

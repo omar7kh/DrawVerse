@@ -22,7 +22,6 @@ const DropdownMenu = () => {
       .then((res) => {
         setIsAuthenticated(false);
         navigate('/');
-        console.log(res);
       })
       .catch((err) => {
         console.log(err);

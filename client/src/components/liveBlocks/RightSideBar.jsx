@@ -18,7 +18,6 @@ const RightSideBar = ({
 
   const handleInputChange = (property, value) => {
     if (!isEditingRef.current) isEditingRef.current = true;
-    console.log('isEditingRef.current', isEditingRef.current);
 
     setElementAttributes((prev) => ({ ...prev, [property]: value }));
 

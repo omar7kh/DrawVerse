@@ -37,6 +37,7 @@ export const createBoard = async (req, res) => {
 
 export const fetchBoard = async (req, res) => {
   const { userId } = req.body;
+  console.log('userId', userId);
 
   let boards = [];
 

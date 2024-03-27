@@ -106,7 +106,6 @@ const Room = ({
   );
 
   useEventListener(({ event }) => {
-    console.log('Received event:', event);
     if (event.message) {
       alert(event.message);
     }

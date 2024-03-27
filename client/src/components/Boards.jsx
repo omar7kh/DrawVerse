@@ -30,7 +30,6 @@ const Boards = () => {
   });
 
   socket?.on('deleteBoard', (boardId) => {
-    console.log('deleteBoard', boardId);
     const updateBoards = boards.filter((board) => {
       return board.boardId !== boardId;
     });
@@ -62,7 +61,6 @@ const Boards = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setBoards(res.data.boards);
         if (res.data.boards.length >= 1) {
           seIsBoard(false);

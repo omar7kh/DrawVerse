@@ -36,13 +36,6 @@ export const UserContextProvider = ({ children }) => {
 
   const handleIfUserHasToken = () => {
     let JWTInfoCookie = cookie.get('JWTinfo');
-    if (!JWTInfoCookie) return false;
-    JWTInfoCookie = JWTInfoCookie.replace('j:', '');
-    const cookieValueObj = JSON.parse(JWTInfoCookie);
-    const expirationInMs = new Date(cookieValueObj.expires) - new Date();
-    const getUserId = cookieValueObj.userId;
-    setUserId(getUserId);
-    if (expirationInMs <= 0) return null;
     return JWTInfoCookie;
   };
 
@@ -55,6 +48,7 @@ export const UserContextProvider = ({ children }) => {
         { withCredentials: true }
       );
       if (res.data.isAuth) {
+        setUserId(res.data.userId);
         setIsAuthenticated(true);
         return true;
       } else {

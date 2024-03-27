@@ -22,7 +22,6 @@ const Members = ({ boardId, isAdmin }) => {
         setMembers(res.data.members);
       } else {
         setMembers([]);
-        console.log(res.data.msg);
       }
     } catch (error) {
       setMembers([]);
@@ -41,7 +40,6 @@ const Members = ({ boardId, isAdmin }) => {
         `${backendApiUrl}/deleteMember/${memberId}/${boardId}/${userId}`
       );
       if (res.data.msg === 'Member removed successfully') {
-        console.log('fetchMembers');
         fetchMembers();
         setIsMemberRemoved(!isMemberRemoved);
       }
