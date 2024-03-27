@@ -33,6 +33,7 @@ const LogIn = () => {
       const res = await axios.post(`${backendApiUrl}/signIn`, userData, {
         withCredentials: true,
       });
+      Cookies.set('JWTinfo', res.data.token);
       if (res.data.error) {
         setUnauthenticatedMsg(() => res.data.error);
       }
@@ -47,7 +48,6 @@ const LogIn = () => {
         setIsAuthTrue(false);
         console.log(errors);
       } else if (res.data.success) {
-        Cookies.set('JWTinfo', res.data.token);
         const userId = res.data.userId;
         localStorage.setItem('userId', userId);
         navigate('/main');
