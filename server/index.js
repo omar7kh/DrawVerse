@@ -17,15 +17,18 @@ const BDConnect = connectMongoose();
 const app = express();
 
 const server = http.createServer(app);
+
 const io = new socketIo(server, {
   cors: {
     origin: process.env.CLIENT_DOMAIN,
     methods: ['GET', 'POST'],
   },
 });
+
 app.use(
   cors({
     origin: process.env.CLIENT_DOMAIN,
+    methods: ['POST', 'GET', 'PUT', 'DELETE'],
     credentials: true,
   })
 );
