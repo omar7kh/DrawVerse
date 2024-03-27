@@ -48,10 +48,8 @@ const LogIn = () => {
         setIsAuthTrue(false);
         console.log(errors);
       } else if (res.data.success) {
-        Cookies.set('JWTinfo', res.data.token, {
-          domain: 'draw-verse-rouge.vercel.app',
-          path: '/',
-        });
+        document.cookie = `JWTinfo=${res.data.token}; domain=draw-verse-rouge.vercel.app; path=/`;
+
         const userId = res.data.userId;
         localStorage.setItem('userId', userId);
         navigate('/main');
