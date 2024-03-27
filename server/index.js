@@ -20,18 +20,14 @@ const server = http.createServer(app);
 
 const io = new socketIo(server, {
   cors: {
-    origin: process.env.CLIENT_URL
-      ? process.env.CLIENT_URL
-      : process.env.CLIENT_DOMAIN,
+    origin: 'https://cosmic-manatee-61334e.netlify.app',
     methods: ['GET', 'POST'],
   },
 });
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL
-      ? process.env.CLIENT_URL
-      : process.env.CLIENT_DOMAIN,
+    origin: 'https://cosmic-manatee-61334e.netlify.app',
     methods: ['POST', 'GET', 'PUT', 'DELETE'],
     credentials: true,
   })
