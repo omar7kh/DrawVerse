@@ -52,7 +52,7 @@ export const userSignIn = async (req, res) => {
 
     const token = jwt.sign({ userId: loggedUser._id }, process.env.JWT_SECRET);
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       msg: 'User logged in',
       userId: loggedUser._id,
