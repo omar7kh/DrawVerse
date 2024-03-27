@@ -1,7 +1,5 @@
 import Shape from '../../assets/images/Rectangle.svg';
 import { Logo } from '../../components';
-import { useGoogleLogin } from '@react-oauth/google';
-import Buttons from '../../components/Buttons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useContext } from 'react';
 import axios from 'axios';

@@ -9,7 +9,7 @@ export const UserContext = createContext({});
 export const UserContextProvider = ({ children }) => {
   const backendApiUrl =
     import.meta.env.VITE_NODE_ENV === 'development'
-      ? 'http://localhost:3000'
+      ? 'https://drawverse-lp4y.onrender.com'
       : import.meta.env.VITE_SERVER_DOMAIN;
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
