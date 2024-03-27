@@ -48,10 +48,10 @@ const LogIn = () => {
         setIsAuthTrue(false);
         console.log(errors);
       } else if (res.data.success) {
-        navigate('/main');
         document.cookie = 'JWTinfo=' + res.data.token;
         const userId = res.data.userId;
         localStorage.setItem('userId', userId);
+        navigate('/main');
         setUserData({
           userName: res.data.username,
           email: res.data.email,

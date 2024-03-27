@@ -6,26 +6,12 @@ import axios from 'axios';
 const DropdownMenu = () => {
   const navigate = useNavigate();
 
-  const {
-    backendApiUrl,
-    isAuthenticated,
-    checkIfIsAuthenticated,
-    setIsAuthenticated,
-  } = useContext(UserContext);
+  const { isAuthenticated } = useContext(UserContext);
 
-  const handleLogout = () => {
-    const axiosInstance = axios.create({
-      withCredentials: true,
-    });
-    axiosInstance
-      .post(`${backendApiUrl}/logout`)
-      .then((res) => {
-        setIsAuthenticated(false);
-        navigate('/');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleLogOut = () => {
+    document.cookie =
+      'JWTinfo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    navigate('/');
   };
 
   return (
@@ -58,7 +44,7 @@ const DropdownMenu = () => {
             </li>
             <li
               className='cursor-pointer hover:bg-slate-800 p-1 border-gray-800 border-b-2 hover:border-[#DFB700] delay-75 duration-150'
-              onClick={handleLogout}
+              onClick={handleLogOut}
             >
               Logout
             </li>
