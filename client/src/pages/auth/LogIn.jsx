@@ -1,13 +1,12 @@
 import Shape from '../../assets/images/Rectangle.svg';
 import { Logo } from '../../components';
-import { useGoogleLogin } from '@react-oauth/google';
-import Buttons from '../../components/Buttons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useContext } from 'react';
 import axios from 'axios';
 import { FaEyeSlash } from 'react-icons/fa';
 import { FaRegEye } from 'react-icons/fa';
 import { UserContext } from '../../context/UserContext';
+import Cookies from 'js-cookie';
 
 const LogIn = () => {
   const { backendApiUrl, setUserId, userData, setUserData } =
@@ -48,7 +47,8 @@ const LogIn = () => {
         setIsAuthTrue(false);
         console.log(errors);
       } else if (res.data.success) {
-        document.cookie = 'JWTinfo=' + res.data.token;
+        Cookies.set('JWTinfo', res.data.token);
+        // document.cookie = 'JWTinfo=' + res.data.token;
         const userId = res.data.userId;
         localStorage.setItem('userId', userId);
         navigate('/main');
