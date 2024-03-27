@@ -9,10 +9,8 @@ const DropdownMenu = () => {
   const { isAuthenticated } = useContext(UserContext);
 
   const handleLogOut = () => {
-    // TODO: for Deployment
-    localStorage.removeItem('JWTinfo');
-    // document.cookie =
-    //   'JWTinfo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie =
+      'JWTinfo=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 
     navigate('/');
   };

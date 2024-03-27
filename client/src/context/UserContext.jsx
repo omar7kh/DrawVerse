@@ -35,12 +35,8 @@ export const UserContextProvider = ({ children }) => {
   });
 
   const handleIfUserHasToken = () => {
-    // TODO: for deployment
-    let JWTInfo = localStorage.getItem('JWTinfo');
-
-    // let JWTInfoCookie = cookie.get('JWTinfo');
-    // return JWTInfoCookie;
-    return JWTInfo;
+    let JWTInfoCookie = cookie.get('JWTinfo');
+    return JWTInfoCookie;
   };
 
   const checkIfIsAuthenticated = async () => {

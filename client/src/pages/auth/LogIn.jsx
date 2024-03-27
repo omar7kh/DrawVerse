@@ -33,10 +33,11 @@ const LogIn = () => {
       const res = await axios.post(`${backendApiUrl}/signIn`, userData, {
         withCredentials: true,
       });
-      // for deployment it should be fixed
-      localStorage.setItem('JWTinfo', res.data.token);
-      // on deployment not work
-      // Cookies.set('JWTinfo', res.data.token);
+      Cookies.set('JWTinfo', res.data.token, {
+        domain: 'draw-verse-rouge.vercel.app',
+        path: '/',
+      });
+
       if (res.data.error) {
         setUnauthenticatedMsg(() => res.data.error);
       }
