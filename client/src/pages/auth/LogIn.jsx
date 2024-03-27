@@ -48,7 +48,6 @@ const LogIn = () => {
         console.log(errors);
       } else if (res.data.success) {
         Cookies.set('JWTinfo', res.data.token);
-        // document.cookie = 'JWTinfo=' + res.data.token;
         const userId = res.data.userId;
         localStorage.setItem('userId', userId);
         navigate('/main');
